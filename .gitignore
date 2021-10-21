@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Arduino build cache
+/build
+
+# VSCode config
+/.vscode
