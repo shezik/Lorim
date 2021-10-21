@@ -14,9 +14,11 @@
 
 -----
 
-## IO Expander MCP23016 (I<sup>2</sup>C)
-- D1 - SCL
-- D2 - SDA
+## Keyboard scanner CH450 (I<sup>2</sup>C)
+*Will this work as an IO expander?*<br>
+*To add a few CS pins for multiple SPI clients.*<br>
+- D1 - SDA
+- D2 - SCL
 
 -----
 
