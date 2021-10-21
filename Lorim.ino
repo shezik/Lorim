@@ -1,12 +1,14 @@
 #include <Arduino.h>
 #include "Kbd_8x5_CH450.hpp"
 
+Kbd_8x5_CH450 keyboard(/*sda=*/21, /*scl=*/22, /*freq=1000000?*/5000);
+
 void setup() {
-  // put your setup code here, to run once:
+
+    Serial.begin(115200);
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
 
 }
