@@ -38,7 +38,7 @@
 
 ##  Reserved pins
 - D4 (Built-in LED)
-- D0 (Auxiliary built-in LED, USER, WAKE)
+- D0 (Auxiliary built-in LED, USER, WAKE) **Temporarily CH450 interrupt, active low**
 - D9 (RXD)
 - D10 (TXD)
 
