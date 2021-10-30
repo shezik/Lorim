@@ -1,5 +1,14 @@
-#include "Lorim_header.hpp"
-#include "Lorim_GEM_Pages.hpp"
+#include "Lorim_definitions.hpp"
+#include <Arduino.h>
+#include <GEM_u8g2.h>
+#include "Kbd_8x5_CH450.hpp"
+#include "TaskDispatcher.hpp"
+
+Kbd_8x5_CH450 keyboard(/*sda=*/D1, /*scl=*/D2, /*freq=1E6?*/5000);
+U8G2_DISPLAY_TYPE u8g2(U8G2_R2, /*clock=*/D5, /*data=*/D7, /*cs=*/D8, /*dc=*/D6, /*reset=*/U8X8_PIN_NONE);
+TaskDispatcher taskDispatcher(u8g2, keyboard);
+
+void saveSettings();
 
 void setup() {
 
@@ -9,47 +18,13 @@ void setup() {
     u8g2.begin();
 
     keyboard.init();
-    menu.init();
-    setupMenu();
-    menu.drawMenu();
 
 }
 
 void loop() {
-    menuKeyboardTick();
-}
-
-void setContrastCallback() {
-    u8g2.setContrast(displayContrast);
-    saveSettings();
+    taskDispatcher.tick();
 }
 
 void saveSettings() {
 
-}
-
-void menuKeyboardTick() {
-    if (menu.readyForKey() && !digitalRead(CH450_INT)) {  // active low
-        uint8_t keycode = Kbd_8x5_CH450::toKeycode(keyboard.getKeyData());
-        switch (keycode) {
-            case 0:
-                menu.registerKeyPress(GEM_KEY_UP);
-                break;
-            case 1:
-                menu.registerKeyPress(GEM_KEY_DOWN);
-                break;
-            case 2:
-                menu.registerKeyPress(GEM_KEY_LEFT);
-                break;
-            case 3:
-                menu.registerKeyPress(GEM_KEY_RIGHT);
-                break;
-            case 4:
-                menu.registerKeyPress(GEM_KEY_OK);
-                break;
-            case 5:
-                menu.registerKeyPress(GEM_KEY_CANCEL);
-                break;
-        }
-    }
 }
