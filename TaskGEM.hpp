@@ -2,6 +2,8 @@
 #define __LORIM_TASKGEM__
 
 #include "Lorim_definitions.hpp"
+#include <GEM_u8g2.h>
+#include "TaskDispatcher.hpp"
 
 class TaskGEM {
     private:
@@ -22,12 +24,12 @@ class TaskGEM {
         void allocateMem();
         void freeMem();
         void setContrastCallback();
-        void initMenu();
         
     public:
         TaskGEM(TaskDispatcher &_parentDispatcher, U8G2_DISPLAY_TYPE &_u8g2);
         ~TaskGEM();
-        void tick(uint8_t keycode);
+        void init();
+        void tick(short keycode);
 };
 
 #endif

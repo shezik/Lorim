@@ -1,0 +1,36 @@
+TaskA (inherited from Task)
+- tick()
+- init()
+- A()
+
+TaskB (inherited from Task)
+- tick()
+- init()
+- B()
+
+Task (base class)
+- tick()
+- init()
+
+
+TaskA taskA();
+TaskB taskB();
+void *currentTask;
+
+currentTask = &taskA;
+
+(Task*)currentTask->init();
+(Task*)currentTask->tick();
+
+IT DOES NOT CALL TICK IN TASKA BUT INSTEAD CALLS TICK IN TASK LIKE WTF??
+
+
+temporary tasks (menu, chatbox, ime, etc.):
+only foreground task is ticked, others are deleted
+if no foreground task is present, launch menu
+foreground task must yield before it could be deleted and new task created
+
+persistent tasks (notification center, LoRa daemon, hotkey listener, battery monitor, etc.):
+always ticked
+
+do not block (go into one's own loop). use status.

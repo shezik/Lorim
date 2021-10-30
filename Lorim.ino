@@ -11,13 +11,9 @@ TaskDispatcher taskDispatcher(u8g2, keyboard);
 void saveSettings();
 
 void setup() {
-
-    pinMode(CH450_INT, INPUT);
-
     Serial.begin(115200);
     u8g2.begin();
-
-    keyboard.init();
+    taskDispatcher.init();
 
 }
 

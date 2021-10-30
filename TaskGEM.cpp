@@ -1,6 +1,4 @@
 #include "TaskGEM.hpp"
-#include <GEM_u8g2.h>
-#include "TaskDispatcher.hpp"
 
 TaskGEM::TaskGEM(TaskDispatcher &_parentDispatcher, U8G2_DISPLAY_TYPE &_u8g2)
     : parentDispatcher(_parentDispatcher)
@@ -11,6 +9,7 @@ TaskGEM::TaskGEM(TaskDispatcher &_parentDispatcher, U8G2_DISPLAY_TYPE &_u8g2)
 
 TaskGEM::~TaskGEM() {
     freeMem();
+    u8g2.clear();
 }
 
 void TaskGEM::allocateMem() {
@@ -27,15 +26,19 @@ void TaskGEM::freeMem() {
     delete pageSettings;
     delete pageItemMainSettings;
     delete pageItemSettingsContrast;
+    menu = NULL;
+    pageMain = NULL;
+    pageSettings = NULL;
+    pageItemMainSettings = NULL;
+    pageItemSettingsContrast = NULL;
 }
 
-void TaskGEM::initMenu() {
+void TaskGEM::init() {
     menu->init();
 
     // setup main page
     pageMain->addMenuItem(*pageItemMainSettings);
     menu->setMenuPageCurrent(*pageMain);
-
     // setup settings page
     pageSettings->addMenuItem(*pageItemSettingsContrast);
     pageSettings->setParentMenuPage(*pageMain);
@@ -49,7 +52,7 @@ void TaskGEM::setContrastCallback() {
     u8g2.setContrast(displayContrast);
 }
 
-void TaskGEM::tick(uint8_t keycode) {
+void TaskGEM::tick(short keycode) {
     if (menu->readyForKey()) {
         switch (keycode) {
             case 0:
