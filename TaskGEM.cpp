@@ -1,13 +1,17 @@
 #include "TaskGEM.hpp"
 
+TaskGEM *TaskGEM::callbackContext = NULL;  // init static variable and allocate memory otherwise you get linker errors
+
 TaskGEM::TaskGEM(TaskDispatcher &_parentDispatcher, U8G2_DISPLAY_TYPE &_u8g2)
     : parentDispatcher(_parentDispatcher)
     , u8g2(_u8g2)
 {
+    callbackContext = this;
     allocateMem();
 }
 
 TaskGEM::~TaskGEM() {
+    callbackContext = NULL;  // set it to null since callbackContext is a static variable.
     freeMem();
     u8g2.clear();
 }
@@ -17,7 +21,7 @@ void TaskGEM::allocateMem() {
     pageMain = new GEMPage("Lorim v0.1");
     pageSettings = new GEMPage("Settings");
     pageItemMainSettings = new GEMItem("Settings", pageSettings);
-    pageItemSettingsContrast = new GEMItem("Contrast:", displayContrast, setContrastCallback);
+    pageItemSettingsContrast = new GEMItem("Contrast:", displayContrast, setContrast_Callback);
 }
 
 void TaskGEM::freeMem() {
@@ -46,7 +50,13 @@ void TaskGEM::init() {
     menu->drawMenu();
 }
 
-void TaskGEM::setContrastCallback() {
+void TaskGEM::setContrast_Callback() {
+    if (callbackContext != NULL) {  // this is static and could be called at any given time
+        callbackContext->setContrast();
+    }
+}
+
+void TaskGEM::setContrast() {
     if (displayContrast > 255) {displayContrast = 255;}
     else if (displayContrast < 0) {displayContrast = 0;}
     u8g2.setContrast(displayContrast);

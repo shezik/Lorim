@@ -1,5 +1,4 @@
-#ifndef __LORIM_TASKDPTCHR__
-#define __LORIM_TASKDPTCHR__
+#pragma once
 
 #include "Lorim_definitions.hpp"
 #include "Kbd_8x5_CH450.hpp"
@@ -26,5 +25,3 @@ class TaskDispatcher {
         void switchTo(uint8_t taskID);
         uint8_t getCurrentTask();
 };
-
-#endif

@@ -9,7 +9,6 @@ TaskDispatcher::TaskDispatcher(U8G2_DISPLAY_TYPE &_u8g2, Kbd_8x5_CH450 &_keyboar
 
 TaskDispatcher::~TaskDispatcher() {
     freeMem();
-    deleteCurrentTask();
 }
 
 void TaskDispatcher::allocateMem() {
@@ -23,6 +22,7 @@ void TaskDispatcher::freeMem() {
         taskGEM = NULL;
     }
     */
+   deleteCurrentTask();
 }
 
 void TaskDispatcher::init() {

@@ -34,3 +34,17 @@ persistent tasks (notification center, LoRa daemon, hotkey listener, battery mon
 always ticked
 
 do not block (go into one's own loop). use status.
+
+# Components and their jobs
+
+## TaskGEM
+
+Should be named "Task Launcher and Settings Manager".  
+Compare its function to that of the Settings app on your phone. It manages all settings for system apps.  
+And it also works as a springboard to launch apps.
+
+Read and apply settings every time the user goes back to main menu.  
+Thus unsaved but already applied settings will be rolled back.
+
+## TaskDispatcher
+
