@@ -9,7 +9,7 @@ class TaskGEM {
     private:
         uint8_t displayContrast = 127;  // Fallback value
         static TaskGEM *callbackContext;  // Save the memory address of (the only, if not less) instance
-                                         // so that static callback methods could locate it.
+                                          // so that static callback methods could locate it.
 
         TaskDispatcher &parentDispatcher;
         U8G2_DISPLAY_TYPE &u8g2;
@@ -35,5 +35,5 @@ class TaskGEM {
         void tick(short keycode);
 
         static void setContrast_Callback();  // static foobar_Callback() and foobar() come in pairs.
-        
+
 };

@@ -35,6 +35,8 @@ always ticked
 
 do not block (go into one's own loop). use status.
 
+**DO NOT DO EXCESSIVE CHECKS.**
+
 # Components and their jobs
 
 ## TaskGEM
@@ -48,3 +50,4 @@ Thus unsaved but already applied settings will be rolled back.
 
 ## TaskDispatcher
 
+Manages user interface related stuff. Does not interfere with background tasks e.g. message retrieving and notification popping.

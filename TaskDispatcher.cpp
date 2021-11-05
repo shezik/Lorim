@@ -32,7 +32,7 @@ void TaskDispatcher::init() {
 
 void TaskDispatcher::tick() {
     short keycode = -1;  // pass in -1 if no key is down
-    if (!digitalRead(CH450_INT)) {
+    if (!digitalRead(CH450_INT)) {  // active low
         keycode = Kbd_8x5_CH450::toKeycode(keyboard.getKeyData());
     }
 

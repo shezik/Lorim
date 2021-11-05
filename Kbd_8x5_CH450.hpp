@@ -15,8 +15,14 @@ class Kbd_8x5_CH450 {
         uint8_t readByte();
         
     public:
-        bool keyIsDown = false;
+        /*
+            @param 'sda_' I2C SDA
+            @param 'scl_' I2C SCL
+            @param 'freq_' (optional) Comm frequency
+            Default 5000, aggressively 1E6
+        */
         Kbd_8x5_CH450(uint8_t sda_, uint8_t scl_, unsigned int freq_ = 5000);
+        bool keyIsDown = false;
         bool init();
         uint8_t getKeyData();
         static bool toState(uint8_t rawdata);
