@@ -25,16 +25,11 @@ void TaskGEM::allocateMem() {
 }
 
 void TaskGEM::freeMem() {
-    delete menu;
-    delete pageMain;
-    delete pageSettings;
-    delete pageItemMainSettings;
-    delete pageItemSettingsContrast;
-    menu = NULL;
-    pageMain = NULL;
-    pageSettings = NULL;
-    pageItemMainSettings = NULL;
-    pageItemSettingsContrast = NULL;
+    delete menu; menu = NULL;
+    delete pageMain; pageMain = NULL;
+    delete pageSettings; pageSettings = NULL;
+    delete pageItemMainSettings; pageItemMainSettings = NULL;
+    delete pageItemSettingsContrast; pageItemSettingsContrast = NULL;
 }
 
 void TaskGEM::init() {
@@ -64,6 +59,10 @@ void TaskGEM::setContrast() {
 
 void TaskGEM::tick(short keycode) {
     if (menu->readyForKey()) {
+        // debug
+        if (keycode != -1) {
+            Serial.printf("Registered keycode: %d\n", keycode);
+        }
         switch (keycode) {
             case 0:
                 menu->registerKeyPress(GEM_KEY_UP);
@@ -77,10 +76,10 @@ void TaskGEM::tick(short keycode) {
             case 3:
                 menu->registerKeyPress(GEM_KEY_RIGHT);
                 break;
-            case 4:
+            case 6:
                 menu->registerKeyPress(GEM_KEY_OK);
                 break;
-            case 5:
+            case 7:
                 menu->registerKeyPress(GEM_KEY_CANCEL);
                 break;
         }
