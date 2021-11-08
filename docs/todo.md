@@ -48,6 +48,6 @@ And it also works as a springboard to launch apps.
 Read and apply settings every time the user goes back to main menu.  
 Thus unsaved but already applied settings will be rolled back.
 
-## TaskDispatcher
+## TaskManager
 
-Manages user interface related stuff. Does not interfere with background tasks e.g. message retrieving and notification popping.
+Manages memory-intensive user interface related stuff. Does not interfere with background tasks e.g. message retrieving and notification popping.

@@ -1,9 +1,9 @@
 #include "TaskGEM.hpp"
 
-TaskGEM *TaskGEM::callbackContext = NULL;  // init static variable and allocate memory otherwise you get linker errors
+TaskGEM *TaskGEM::callbackContext = nullptr;  // init static variable and allocate memory otherwise you get linker errors
 
-TaskGEM::TaskGEM(TaskDispatcher &_parentDispatcher, U8G2_DISPLAY_TYPE &_u8g2)
-    : parentDispatcher(_parentDispatcher)
+TaskGEM::TaskGEM(TaskManager &_parentManager, U8G2_DISPLAY_TYPE &_u8g2)
+    : parentManager(_parentManager)
     , u8g2(_u8g2)
 {
     callbackContext = this;
@@ -11,7 +11,7 @@ TaskGEM::TaskGEM(TaskDispatcher &_parentDispatcher, U8G2_DISPLAY_TYPE &_u8g2)
 }
 
 TaskGEM::~TaskGEM() {
-    callbackContext = NULL;  // set it to null since callbackContext is a static variable.
+    callbackContext = nullptr;  // set it to nullptr since callbackContext is a static variable.
     freeMem();
     u8g2.clear();
 }
@@ -25,11 +25,11 @@ void TaskGEM::allocateMem() {
 }
 
 void TaskGEM::freeMem() {
-    delete menu; menu = NULL;
-    delete pageMain; pageMain = NULL;
-    delete pageSettings; pageSettings = NULL;
-    delete pageItemMainSettings; pageItemMainSettings = NULL;
-    delete pageItemSettingsContrast; pageItemSettingsContrast = NULL;
+    delete menu; menu = nullptr;
+    delete pageMain; pageMain = nullptr;
+    delete pageSettings; pageSettings = nullptr;
+    delete pageItemMainSettings; pageItemMainSettings = nullptr;
+    delete pageItemSettingsContrast; pageItemSettingsContrast = nullptr;
 }
 
 void TaskGEM::init() {
@@ -46,7 +46,7 @@ void TaskGEM::init() {
 }
 
 void TaskGEM::setContrast_Callback() {
-    if (callbackContext != NULL) {  // this is static and could be called at any given time
+    if (callbackContext) {  // this is static and could be called at any given time
         callbackContext->setContrast();
     }
 }

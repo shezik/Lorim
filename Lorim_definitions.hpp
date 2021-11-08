@@ -26,7 +26,7 @@
 #define SPI_DC 19
 #define U8G2_DISPLAY_RESET U8X8_PIN_NONE
 
-// Task IDs (this is not even close to elegance)
-#define DEFAULT_TASK ID_TASKGEM
+// Task unique IDs
+#define ID_DEFAULT ID_TASKGEM
 #define ID_NONE    0
 #define ID_TASKGEM 1
