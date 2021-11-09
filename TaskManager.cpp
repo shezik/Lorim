@@ -1,8 +1,9 @@
 #include "TaskManager.hpp"
 
-TaskManager::TaskManager(U8G2_DISPLAY_TYPE &_u8g2, Kbd_8x5_CH450 &_keyboard)
+TaskManager::TaskManager(U8G2_DISPLAY_TYPE &_u8g2, Kbd_8x5_CH450 &_keyboard, Mailbox &_mailbox)
     : u8g2(_u8g2)
     , keyboard(_keyboard)
+    , mailbox(_mailbox)
 {
     allocateMem();
 }
@@ -41,7 +42,7 @@ void TaskManager::tick() {
 void TaskManager::launchTask(uint8_t taskID) {  // register new tasks here
     switch (taskID) {
         case ID_TASKGEM:
-            currentTask = new TaskGEM(*this, u8g2);
+            currentTask = new TaskGEM(*this, u8g2, mailbox);
             currentTask->init();
             break;
     }

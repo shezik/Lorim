@@ -31,9 +31,9 @@
 #define SPI_CS 5
 #define SPI_DC 19
 #define U8G2_DISPLAY_RESET U8X8_PIN_NONE
-#define LORA_CS 18
-#define LORA_RST 23
-#define LORA_DIO 26
+#define LORA_CS 25
+#define LORA_RST 26
+#define LORA_DIO 27
 #define LORA_FREQ 470E6
 
 // Task unique IDs
@@ -41,4 +41,6 @@
 #define ID_NONE    0
 #define ID_TASKGEM 1
 
+#define ARDUINO_LORA
 #define MAX_USERNAME_LENGTH 10
+#define HISTORY_PATH "/History.txt"

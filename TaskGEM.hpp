@@ -3,6 +3,7 @@
 #include "Lorim_definitions.hpp"
 #include <GEM_u8g2.h>
 #include "TaskBase.hpp"
+#include "Mailbox.hpp"
 
 class TaskManager;
 
@@ -14,6 +15,7 @@ class TaskGEM : public TaskBase {
 
         TaskManager &parentManager;
         U8G2_DISPLAY_TYPE &u8g2;
+        Mailbox &mailbox;
 
         GEM_u8g2 *menu;
         // Pages
@@ -30,7 +32,7 @@ class TaskGEM : public TaskBase {
         void setContrast();
         
     public:
-        TaskGEM(TaskManager &_parentManager, U8G2_DISPLAY_TYPE &_u8g2);
+        TaskGEM(TaskManager &_parentManager, U8G2_DISPLAY_TYPE &_u8g2, Mailbox &_mailbox);
         ~TaskGEM();
         void init();
         void tick(int16_t keycode);

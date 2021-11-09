@@ -2,9 +2,10 @@
 
 TaskGEM *TaskGEM::callbackContext = nullptr;  // init static variable and allocate memory otherwise you get linker errors
 
-TaskGEM::TaskGEM(TaskManager &_parentManager, U8G2_DISPLAY_TYPE &_u8g2)
+TaskGEM::TaskGEM(TaskManager &_parentManager, U8G2_DISPLAY_TYPE &_u8g2, Mailbox &_mailbox)
     : parentManager(_parentManager)
     , u8g2(_u8g2)
+    , mailbox(_mailbox)
 {
     callbackContext = this;
     allocateMem();

@@ -6,7 +6,9 @@
     #include <ESP8266WiFi.h>
 #endif
 #include <GEM_u8g2.h>
-#include <LoRaLayer2.h>  // !!
+#include <cstring>
+#include "Layer1_LoRa.h"
+#include "LoRaLayer2.h"
 #include <FS.h>
 #include <LittleFS.h>
 #include "Kbd_8x5_CH450.hpp"
@@ -19,9 +21,7 @@ LL2Class *LL2;
 Kbd_8x5_CH450 keyboard(I2C_SDA, I2C_SCL, /*freq=1E6?*/5000);
 U8G2_DISPLAY_TYPE u8g2(U8G2_R2, SPI_CLK, SPI_DATA, SPI_CS, SPI_DC, U8G2_DISPLAY_RESET);
 Mailbox mailbox(LittleFS);
-TaskManager taskManager(u8g2, keyboard);
-
-char nodeAddress[ADDR_LENGTH*2 + 1] = {'\0'};
+TaskManager taskManager(u8g2, keyboard, mailbox);
 
 void initLL2();
 void saveSettings();
@@ -30,20 +30,24 @@ void setup() {
 
     Serial.begin(115200);
     u8g2.begin();
-    LittleFS.begin();
+    if (!LittleFS.begin()) {
+        LittleFS.format();
+        LittleFS.begin();
+    }
     initLL2();
-    mailbox.init(Layer1, LL2);
+    //mailbox.init(Layer1, LL2);
     taskManager.init();
 
 }
 
 void loop() {
     taskManager.tick();
-    mailbox.tick();
+    //mailbox.tick();
 }
 
 void initLL2() {
-    // The following 3 lines are copied from disaster.radio
+    // The following 4 lines are copied from disaster.radio
+    char nodeAddress[ADDR_LENGTH*2 + 1] = {'\0'};
     uint8_t mac[6];
     WiFi.macAddress(mac);
     sprintf(nodeAddress, "%02x%02x%02x%02x", mac[2], mac[3], mac[4], mac[5]);
@@ -53,8 +57,8 @@ void initLL2() {
     Layer1->setPins(LORA_CS, LORA_RST, LORA_DIO);
     Layer1->setLoRaFrequency(LORA_FREQ);
     Layer1->init();
-    LL2->setLocalAddress(nodeAddress);
-    LL2->init();
+    //LL2->setLocalAddress(nodeAddress);
+    //LL2->init();
 }
 
 void saveSettings() {

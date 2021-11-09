@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Lorim_definitions.hpp"
-#include <LoRaLayer2.h>
+#include "LoRaLayer2.h"
 #include <FS.h>
-#include <ArduinoJson.h>
 
 class Mailbox {
     private:
@@ -21,5 +20,6 @@ class Mailbox {
         void sendMessage(char* message, uint8_t *myAddress, char *myUsername, uint8_t *destination);
         uint16_t getNewMsgCount();
         void clearNewMsgCount();
-        File& getHistoryFileObj();
+        File* getHistoryFileObj();
+        void closeHistoryFileObj();
 };

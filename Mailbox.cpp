@@ -12,7 +12,7 @@ Mailbox::~Mailbox() {
 
 void Mailbox::init(Layer1Class *_Layer1, LL2Class *_LL2) {
     Layer1 = _Layer1; LL2 = _LL2;
-    (lilFS.open("/History.txt", "w+")).close();
+    (lilFS.open(HISTORY_PATH, "w+")).close();
 }
 
 void Mailbox::tick() {
@@ -37,7 +37,7 @@ void Mailbox::tick() {
 }
 
 void Mailbox::appendToHistory(char *message, uint8_t *address, char *username) {
-    File historyFile = lilFS.open("/History.txt", "a");
+    File historyFile = lilFS.open(HISTORY_PATH, "a");
 
     historyFile.write('\n');
 
@@ -46,7 +46,7 @@ void Mailbox::appendToHistory(char *message, uint8_t *address, char *username) {
         historyFile.write(username[i]);
     }
 
-    historyFile.write('\t');
+    historyFile.write('\t');  // separator
 
     char addrString[ADDR_LENGTH*2 + 1];
     sprintf(addrString, "%02x%02x%02x%02x", address[2], address[3], address[4], address[5]);
@@ -68,7 +68,11 @@ void Mailbox::appendToHistory(char *message, uint8_t *address, char *username) {
 
 void Mailbox::sendMessage(char* message, uint8_t *myAddress, char *myUsername, uint8_t *destination) {
     appendToHistory(message, myAddress, myUsername);
-    
+    struct Datagram datagram;
+    uint8_t msgLen = sprintf((char*)datagram.message, "%s\0%s", myUsername, message);
+    memcpy(datagram.destination, destination, ADDR_LENGTH);
+    datagram.type = 'c';
+    LL2->writeData(datagram, msgLen + DATAGRAM_HEADER);
 }
 
 uint16_t Mailbox::getNewMsgCount() {
