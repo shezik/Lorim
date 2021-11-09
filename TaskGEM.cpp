@@ -120,7 +120,7 @@ void TaskGEM::tick(int16_t keycode) {
             width = width - 3;
         }
 
-        u8g2.drawButtonUTF8(width, u8g2.getDisplayHeight() - 13, U8G2_BTN_BW1, 0, 1, 1, countStr);  // !!
+        u8g2.drawButtonUTF8(width, u8g2.getDisplayHeight() - 11, U8G2_BTN_BW1, 0, 1, 1, countStr);  // !!
         u8g2.sendBuffer();
     }
 }

@@ -10,6 +10,8 @@ class TaskManager {
         U8G2_DISPLAY_TYPE &u8g2;
         Kbd_8x5_CH450 &keyboard;
         Mailbox &mailbox;
+
+        bool taskDeletionScheduled = false;
         
         void allocateMem();
         void freeMem();
