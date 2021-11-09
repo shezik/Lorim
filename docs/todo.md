@@ -1,29 +1,6 @@
-TaskA (inherited from Task)
-- tick()
-- init()
-- A()
+# Sketchpad.
 
-TaskB (inherited from Task)
-- tick()
-- init()
-- B()
-
-Task (base class)
-- tick()
-- init()
-
-
-TaskA taskA();
-TaskB taskB();
-void *currentTask;
-
-currentTask = &taskA;
-
-(Task*)currentTask->init();
-(Task*)currentTask->tick();
-
-IT DOES NOT CALL TICK IN TASKA BUT INSTEAD CALLS TICK IN TASK LIKE WTF??
-
+## Depreciated
 
 temporary tasks (menu, chatbox, ime, etc.):
 only foreground task is ticked, others are deleted
@@ -36,6 +13,19 @@ always ticked
 do not block (go into one's own loop). use status.
 
 **DO NOT DO EXCESSIVE CHECKS.**
+
+## UTC+8 20:40 Nov 8, 2021
+
+Mailbox: r/w chat history text file, provides chatbox with history, keeps number of new datagrams since last getNewMails
+
+TaskGEM: gets number of new datagrams and draws notifications on screen
+
+Filesystem FS();
+Mailbox mailbox(FS);
+TaskManager taskManager(u8g2, keyboard, mailbox);
+TaskChatbox taskChatbox(u8g2, keyboard, mailbox);
+
+## README sketch underneath
 
 # Components and their jobs
 

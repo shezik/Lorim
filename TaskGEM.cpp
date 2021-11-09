@@ -57,7 +57,7 @@ void TaskGEM::setContrast() {
     u8g2.setContrast(displayContrast);
 }
 
-void TaskGEM::tick(short keycode) {
+void TaskGEM::tick(int16_t keycode) {
     if (menu->readyForKey()) {
         // debug
         if (keycode != -1) {
