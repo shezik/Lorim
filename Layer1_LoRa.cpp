@@ -1,6 +1,6 @@
 #include "Layer1_LoRa.h"
 
-Layer1Class::Layer1Class()
+Layer1Class::Layer1Class(SPIClass &spi)
 : _csPin(18),
   _resetPin(23),
   _DIOPin(26),
@@ -8,7 +8,8 @@ Layer1Class::Layer1Class()
   _loraFrequency(915E6),
   _txPower(17),
   _loraInitialized(0),
-  _spiFrequency(100E3)
+  _spiFrequency(100E3),
+  _spi(spi)
 {
   txBuffer = new packetBuffer();
   rxBuffer = new packetBuffer();
@@ -136,6 +137,7 @@ void Layer1Class::setFlag(int packetSize) {
 */
 // Initialization
 int Layer1Class::init(){
+    LoRa.setSPI(_spi);
     LoRa.setPins(_csPin, _resetPin, _DIOPin); // set CS, reset, DIO pin
     LoRa.setSPIFrequency(_spiFrequency);
     LoRa.setTxPower(_txPower);

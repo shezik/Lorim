@@ -7,7 +7,7 @@
 #define FORMAT_LITTLEFS_IF_FAILED true
 
 /*
-// esp8266
+// esp8266 (deprecated)
 #define CH450_INT D0
 #define I2C_SDA D1
 #define I2C_SCL D2
@@ -26,14 +26,17 @@
 #define CH450_INT 34
 #define I2C_SDA 21
 #define I2C_SCL 22
-#define SPI_CLK 18
-#define SPI_DATA 23
-#define SPI_CS 5
-#define SPI_DC 19
+#define VSPI_DC 19    // VSPI_MISO
+#define VSPI_DATA 23  // VSPI_MOSI
+#define VSPI_CLK 18
+#define VSPI_CS 5
 #define U8G2_DISPLAY_RESET U8X8_PIN_NONE
-#define LORA_CS 25
-#define LORA_RST 26
-#define LORA_DIO 27
+#define HSPI_MISO 12
+#define HSPI_MOSI 13
+#define HSPI_CLK 14
+#define LORA_CS 15  // HSPI_CS0
+#define LORA_RST 36
+#define LORA_DIO 39
 #define LORA_FREQ 470E6
 
 // Task unique IDs

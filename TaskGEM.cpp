@@ -59,9 +59,12 @@ void TaskGEM::setContrast() {
 }
 
 void TaskGEM::tick(int16_t keycode) {
+
+    bool validKeyPressed = false;
+
     if (menu->readyForKey()) {
-        // debug
-        if (keycode != -1) {
+        validKeyPressed = true;
+        if (keycode != -1) {  // debug
             Serial.printf("Registered keycode: %d\n", keycode);
         }
         switch (keycode) {
@@ -83,6 +86,41 @@ void TaskGEM::tick(int16_t keycode) {
             case 7:
                 menu->registerKeyPress(GEM_KEY_CANCEL);
                 break;
+            default:
+                validKeyPressed = false;
+                break;
         }
+    }
+
+    static uint8_t newMsgCount = 0;
+    static uint8_t prevCount = 0;
+    static uint8_t tickCount = 11;  // triggers update on first launch
+
+    if (tickCount > 10) {  // Update every 10 ticks
+        newMsgCount = mailbox.getNewMsgCount();
+        tickCount = 1;
+    } else {
+        tickCount++;
+    }
+    
+    if (newMsgCount && (validKeyPressed || (prevCount != newMsgCount))) {
+        prevCount = newMsgCount;
+
+        char countStr[3] = "??";
+        if (newMsgCount < 99) {
+            sprintf(countStr, "%d", newMsgCount);
+        }
+        u8g2.setFont(u8g2_font_5x7_tr);
+        u8g2.setFontMode(1);
+        u8g2.setDrawColor(1);  // do not use XOR, its behavior weird in this case :) try it and you'll see why.
+
+        // adjust right margin according to digits
+        uint16_t width = u8g2.getDisplayWidth() - 11;
+        if (newMsgCount > 9) {
+            width = width - 3;
+        }
+
+        u8g2.drawButtonUTF8(width, u8g2.getDisplayHeight() - 13, U8G2_BTN_BW1, 0, 1, 1, countStr);  // !!
+        u8g2.sendBuffer();
     }
 }

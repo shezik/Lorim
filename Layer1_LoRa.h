@@ -9,7 +9,7 @@
 
 class Layer1Class {
 public:
-    Layer1Class();
+    Layer1Class(SPIClass &spi);
 
     int debug_printf(const char* format, ...);
 
@@ -21,6 +21,7 @@ public:
     int DIOPin();
     int spreadingFactor();
     uint32_t spiFrequency();
+    SPIClass &_spi;
     uint32_t loraFrequency();
     int txPower();
 
