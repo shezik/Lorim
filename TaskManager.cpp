@@ -32,13 +32,6 @@ void TaskManager::tick() {
         keycode = Kbd_8x5_CH450::toKeycode(keyboard.getKeyData());
     }
 
-    if (taskDeletionScheduled) {
-        taskDeletionScheduled = false;
-        if (currentTask) {
-            delete currentTask; currentTask = nullptr;
-        }
-    }
-
     if (currentTask) {
         currentTask->tick(keycode);
     } else {
@@ -56,7 +49,9 @@ void TaskManager::launchTask(uint8_t taskID) {  // register new tasks here
 }
 
 void TaskManager::deleteCurrentTask() {
-    taskDeletionScheduled = true;
+    if (currentTask) {
+        delete currentTask; currentTask = nullptr;
+    }
 }
 
 uint8_t TaskManager::getCurrentTaskID() {
