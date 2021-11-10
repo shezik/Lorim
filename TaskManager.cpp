@@ -17,7 +17,7 @@ void TaskManager::allocateMem() {
 }
 
 void TaskManager::freeMem() {
-   deleteCurrentTask();
+   deleteCurrentTask(false);
 }
 
 void TaskManager::init() {
@@ -32,14 +32,28 @@ void TaskManager::tick() {
         keycode = Kbd_8x5_CH450::toKeycode(keyboard.getKeyData());
     }
 
+    if (deleteTaskNextTick) {
+        deleteCurrentTask(false);
+        deleteTaskNextTick = false;
+    }
+    if (launchTaskNextTick) {
+        launchTask(launchingTask, false);
+        launchTaskNextTick = false;
+    }
+
     if (currentTask) {
         currentTask->tick(keycode);
     } else {
-        launchTask(ID_DEFAULT);
+        launchTask(ID_DEFAULT, false);
     }
 }
 
-void TaskManager::launchTask(uint8_t taskID) {  // register new tasks here
+void TaskManager::launchTask(uint8_t taskID, bool nextTick) {  // register new tasks here
+    if (nextTick) {
+        launchTaskNextTick = true;
+        launchingTask = taskID;
+        return;
+    }
     switch (taskID) {
         case ID_TASKGEM:
             currentTask = new TaskGEM(*this, u8g2, mailbox);
@@ -48,7 +62,11 @@ void TaskManager::launchTask(uint8_t taskID) {  // register new tasks here
     }
 }
 
-void TaskManager::deleteCurrentTask() {
+void TaskManager::deleteCurrentTask(bool nextTick) {
+    if (nextTick) {
+        deleteTaskNextTick = true;
+        return;
+    }
     if (currentTask) {
         delete currentTask; currentTask = nullptr;
     }
@@ -61,7 +79,7 @@ uint8_t TaskManager::getCurrentTaskID() {
     return ID_NONE;
 }
 
-void TaskManager::switchTo(uint8_t taskID) {
-    deleteCurrentTask();
-    launchTask(taskID);
+void TaskManager::switchTo(uint8_t taskID, bool nextTick) {
+    deleteCurrentTask(nextTick);
+    launchTask(taskID, nextTick);
 }

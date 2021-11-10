@@ -13,9 +13,13 @@ class TaskManager {
         
         void allocateMem();
         void freeMem();
-        void launchTask(uint8_t taskID);
-        void deleteCurrentTask();
+        void launchTask(uint8_t taskID, bool nextTick);
+        void deleteCurrentTask(bool nextTick);
         
+        bool deleteTaskNextTick = false;
+        bool launchTaskNextTick = false;
+        uint8_t launchingTask;
+
         TaskBase *currentTask = nullptr;
 
     public:
@@ -23,6 +27,6 @@ class TaskManager {
         ~TaskManager();
         void init();
         void tick();
-        void switchTo(uint8_t taskID);
+        void switchTo(uint8_t taskID, bool nextTick);
         uint8_t getCurrentTaskID();
 };
