@@ -5,19 +5,11 @@ TaskManager::TaskManager(U8G2_DISPLAY_TYPE &_u8g2, Kbd_8x5_CH450 &_keyboard, Mai
     , keyboard(_keyboard)
     , mailbox(_mailbox)
 {
-    allocateMem();
+    // do nothing
 }
 
 TaskManager::~TaskManager() {
-    freeMem();
-}
-
-void TaskManager::allocateMem() {
-    
-}
-
-void TaskManager::freeMem() {
-   deleteCurrentTask(false);
+    deleteCurrentTask(false);
 }
 
 void TaskManager::init() {
@@ -57,6 +49,10 @@ void TaskManager::launchTask(uint8_t taskID, bool nextTick) {  // register new t
     switch (taskID) {
         case ID_TASKGEM:
             currentTask = new TaskGEM(*this, u8g2, mailbox);
+            currentTask->init();
+            break;
+        case ID_CHATBOX:
+            currentTask = new TaskChatbox(*this, u8g2, mailbox);
             currentTask->init();
             break;
     }

@@ -3,6 +3,7 @@
 #include "Lorim_definitions.hpp"
 #include "Kbd_8x5_CH450.hpp"
 #include "TaskGEM.hpp"
+#include "TaskChatbox.hpp"
 #include "Mailbox.hpp"
 
 class TaskManager {
@@ -11,8 +12,6 @@ class TaskManager {
         Kbd_8x5_CH450 &keyboard;
         Mailbox &mailbox;
         
-        void allocateMem();
-        void freeMem();
         void launchTask(uint8_t taskID, bool nextTick);
         void deleteCurrentTask(bool nextTick);
         

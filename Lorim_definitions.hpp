@@ -43,6 +43,7 @@
 #define ID_DEFAULT ID_TASKGEM
 #define ID_NONE    0
 #define ID_TASKGEM 1
+#define ID_CHATBOX 2
 
 #define ARDUINO_LORA
 #define MAX_USERNAME_LENGTH 10

@@ -33,10 +33,10 @@ class TaskGEM : public TaskBase {
         
     public:
         TaskGEM(TaskManager &_parentManager, U8G2_DISPLAY_TYPE &_u8g2, Mailbox &_mailbox);
-        ~TaskGEM();
-        void init();
-        void tick(int16_t keycode);
-        uint8_t getTaskID() {return ID_TASKGEM;}
+        ~TaskGEM() override;
+        void init() override;
+        void tick(int16_t keycode) override;
+        uint8_t getTaskID() override {return ID_TASKGEM;}
 
         static void setContrast_Callback();  // static foobar_Callback() and foobar() come in pairs.
 
