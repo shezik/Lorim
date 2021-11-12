@@ -2,9 +2,12 @@
 
 #include "Lorim_definitions.hpp"
 #include "Kbd_8x5_CH450.hpp"
-#include "TaskGEM.hpp"
-#include "TaskChatbox.hpp"
+#include <GEM_u8g2.h>
 #include "Mailbox.hpp"
+#include "TaskBase.hpp"
+
+class TaskGEM;
+class TaskChatbox;
 
 class TaskManager {
     private:

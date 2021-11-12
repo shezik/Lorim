@@ -4,8 +4,7 @@
 #include <GEM_u8g2.h>
 #include "TaskBase.hpp"
 #include "Mailbox.hpp"
-
-class TaskManager;
+#include "TaskManager.hpp"
 
 class TaskGEM : public TaskBase {
     private:
@@ -22,6 +21,7 @@ class TaskGEM : public TaskBase {
         GEMPage *pageMain;
         GEMPage *pageSettings;
         // Items for pageMain
+        GEMItem *pageItemMainChatbox;
         GEMItem *pageItemMainSettings;
         // Items for pageSettings
         GEMItem *pageItemSettingsContrast;
@@ -30,7 +30,7 @@ class TaskGEM : public TaskBase {
         void freeMem();
         
         void setContrast();
-        
+
     public:
         TaskGEM(TaskManager &_parentManager, U8G2_DISPLAY_TYPE &_u8g2, Mailbox &_mailbox);
         ~TaskGEM() override;
@@ -39,5 +39,6 @@ class TaskGEM : public TaskBase {
         uint8_t getTaskID() override {return ID_TASKGEM;}
 
         static void setContrast_Callback();  // static foobar_Callback() and foobar() come in pairs.
+        static void switchToChatbox_Callback();
 
 };

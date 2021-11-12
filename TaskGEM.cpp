@@ -21,6 +21,7 @@ void TaskGEM::allocateMem() {
     menu = new GEM_u8g2(u8g2, /*menuPointerType=*/GEM_POINTER_DASH, /*menuItemsPerScreen=*/7, /*menuItemsPerScreen*/8, /*menuPageScreenTopOffset*/8, /*menuValuesLeftOffset*/80);
     pageMain = new GEMPage("Lorim v0.1");
     pageSettings = new GEMPage("Settings");
+    pageItemMainChatbox = new GEMItem("Chatbox", switchToChatbox_Callback);
     pageItemMainSettings = new GEMItem("Settings", pageSettings);
     pageItemSettingsContrast = new GEMItem("Contrast:", displayContrast, setContrast_Callback);
 }
@@ -29,6 +30,7 @@ void TaskGEM::freeMem() {
     delete menu; menu = nullptr;
     delete pageMain; pageMain = nullptr;
     delete pageSettings; pageSettings = nullptr;
+    delete pageItemMainChatbox; pageItemMainChatbox = nullptr;
     delete pageItemMainSettings; pageItemMainSettings = nullptr;
     delete pageItemSettingsContrast; pageItemSettingsContrast = nullptr;
 }
@@ -37,6 +39,7 @@ void TaskGEM::init() {
     menu->init();
 
     // setup main page
+    pageMain->addMenuItem(*pageItemMainChatbox);
     pageMain->addMenuItem(*pageItemMainSettings);
     menu->setMenuPageCurrent(*pageMain);
     // setup settings page
@@ -44,6 +47,12 @@ void TaskGEM::init() {
     pageSettings->setParentMenuPage(*pageMain);
 
     menu->drawMenu();
+}
+
+void TaskGEM::switchToChatbox_Callback() {
+    if (callbackContext) {
+        callbackContext->parentManager.switchTo(ID_CHATBOX, true);
+    }
 }
 
 void TaskGEM::setContrast_Callback() {

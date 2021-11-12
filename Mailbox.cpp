@@ -62,7 +62,6 @@ void Mailbox::appendToHistory(char *message, uint8_t *address, char *username) {
         historyFile.write(message[i]);
     }
 
-    historyFile.flush();
     historyFile.close();
 }
 
@@ -81,4 +80,8 @@ uint16_t Mailbox::getNewMsgCount() {
 
 void Mailbox::clearNewMsgCount() {
     newMsgCount = 0;
+}
+
+FS& Mailbox::getFSReference() {
+    return lilFS;
 }

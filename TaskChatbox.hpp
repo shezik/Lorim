@@ -1,16 +1,22 @@
 #pragma once
 
 #include "Lorim_definitions.hpp"
+#include <GEM_u8g2.h>
 #include "TaskBase.hpp"
+#include "Mailbox.hpp"
+#include "TaskManager.hpp"
 
 class TaskChatbox : public TaskBase {
     private:
         TaskManager &parentManager;
         U8G2_DISPLAY_TYPE &u8g2;
         Mailbox &mailbox;
+        FS &lilFS;
 
         void allocateMem();
         void freeMem();
+
+        uint8_t seekPrevLine(File &file);
 
     public:
         TaskChatbox(TaskManager &_parentManager, U8G2_DISPLAY_TYPE &_u8g2, Mailbox &_mailbox);

@@ -1,4 +1,6 @@
 #include "TaskManager.hpp"
+#include "TaskGEM.hpp"
+#include "TaskChatbox.hpp"
 
 TaskManager::TaskManager(U8G2_DISPLAY_TYPE &_u8g2, Kbd_8x5_CH450 &_keyboard, Mailbox &_mailbox)
     : u8g2(_u8g2)

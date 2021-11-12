@@ -20,6 +20,5 @@ class Mailbox {
         void sendMessage(char* message, uint8_t *myAddress, char *myUsername, uint8_t *destination);
         uint16_t getNewMsgCount();
         void clearNewMsgCount();
-        File* getHistoryFileObj();
-        void closeHistoryFileObj();
+        FS& getFSReference();
 };
