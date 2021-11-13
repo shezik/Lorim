@@ -28,8 +28,9 @@ void setup() {
 
     Serial.begin(115200);
     u8g2.begin();
-    if (!LittleFS.begin()) {
+    if (!LittleFS.begin(/*FORMAT_LITTLEFS_IF_FAILED*/)) {
         LittleFS.format();
+        Serial.printf("Formatted LittleFS\n");
         LittleFS.begin();
     }
     initLL2();

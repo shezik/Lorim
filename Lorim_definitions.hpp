@@ -50,4 +50,4 @@
 
 #define ARDUINO_LORA
 #define MAX_USERNAME_LENGTH 10
-#define HISTORY_PATH "/History.txt"
+#define HISTORY_PATH "/history.txt"

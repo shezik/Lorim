@@ -1,0 +1,2 @@
+This is a line with no forward \n
+This is a line with forward \n
