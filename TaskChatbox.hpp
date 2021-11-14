@@ -12,11 +12,16 @@ class TaskChatbox : public TaskBase {
         U8G2_DISPLAY_TYPE &u8g2;
         Mailbox &mailbox;
         FS &lilFS;
+        File file;
 
         void allocateMem();
         void freeMem();
 
+        uint16_t filePos = 0;  // counting from the end of file
+
+        void displayPage(File &file, uint16_t offset);
         uint16_t seekToPrevPage(File &file);
+        uint16_t seekToPrevLine(File &file, uint16_t lastPos, bool direction);
 
     public:
         TaskChatbox(TaskManager &_parentManager, U8G2_DISPLAY_TYPE &_u8g2, Mailbox &_mailbox);
