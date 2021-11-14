@@ -39,7 +39,7 @@ bool Kbd_8x5_CH450::writeByte(uint8_t data) {
         digitalWrite(scl, LOW);
         delay(delayms);
     }
-    pinMode(sda, INPUT);
+    pinMode(sda, INPUT_PULLUP);
     digitalWrite(scl, HIGH);
     delay(delayms);
     bool result = digitalRead(sda);
@@ -53,7 +53,7 @@ bool Kbd_8x5_CH450::writeByte(uint8_t data) {
 
 uint8_t Kbd_8x5_CH450::readByte() {
     uint8_t data = 0;
-    pinMode(sda, INPUT);
+    pinMode(sda, INPUT_PULLUP);
     for (int8_t i = 7; i > -1; i--) {
         digitalWrite(scl, HIGH);
         delay(delayms);
