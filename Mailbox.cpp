@@ -12,7 +12,7 @@ Mailbox::~Mailbox() {
 
 void Mailbox::init(Layer1Class *_Layer1, LL2Class *_LL2) {
     Layer1 = _Layer1; LL2 = _LL2;
-    (lilFS.open(HISTORY_PATH, "w+")).close();
+    (lilFS.open(HISTORY_PATH, "a")).close();  // create file if not exist
 }
 
 void Mailbox::tick() {

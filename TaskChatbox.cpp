@@ -24,28 +24,45 @@ void TaskChatbox::freeMem() {
 void TaskChatbox::init() {
     File file = lilFS.open(HISTORY_PATH, "r");
     uint8_t buf[CHARS_PER_LINE + 1];
-    file.seek(0, SeekEnd);
-    for (uint8_t i = 0; i < LINES_PER_PAGE; i++) {
-        uint8_t len = seekPrevLine(file);
-        uint32_t lastPos = file.position();
-        file.read(buf, len);
-        buf[len] = '\0';
-        u8g2.drawStr(0, (i + 1) * 8, (const char*)buf);
-        file.seek(lastPos + 1, SeekEnd);
+    if (!file) {
+        Serial.printf("File error!\n");
     }
+    file.seek(0, SeekEnd);
+    uint16_t availLen = seekToPrevPage(file);
+/*debug*/Serial.printf("availLen: %d\n", availLen);
+    for (uint8_t j = 0; j < LINES_PER_PAGE && availLen > 0; j++) {
+        uint8_t i = 0;
+        while (i < CHARS_PER_LINE && availLen > 0) {
+            uint8_t peekResult = file.peek();
+            if (peekResult != '\n') {
+                buf[i] = peekResult;
+                availLen--; i++;
+/*debug*/       Serial.printf("availLen: %d, i: %d\n", availLen, i);
+            }
+/*debug*/   Serial.printf("pos: %d\n", file.position());
+            file.seek(1, SeekCur);
+        }
+        buf[i] = '\0';
+        u8g2.drawStr(0, (j + 1) * 8, (const char*)buf);
+    }
+    u8g2.sendBuffer();
     file.close();
 }
 
 void TaskChatbox::tick(int16_t keycode) {
-
+    if (keycode != -1) {
+        parentManager.switchTo(ID_TASKGEM, true);
+    }
 }
 
-uint8_t TaskChatbox::seekPrevLine(File &file) {
-    uint32_t offset = file.position();
-    uint8_t i;
-    for (i = 1; i < CHARS_PER_LINE; i++) {
-        if (file.peek() != '\n') break;
-        if (!file.seek(offset + i, SeekEnd)) break;
+uint16_t TaskChatbox::seekToPrevPage(File &file) {
+    const uint16_t charsPerPage = CHARS_PER_LINE * LINES_PER_PAGE;
+    uint16_t i = 0;
+    while (i < charsPerPage) {
+/*debug*/Serial.printf("Seeking File Pos: %d\n", file.position());
+        if (file.position() == 0 || (!file.seek(file.position() - 1)) || file.peek() == -1 /*!! last two are unhandled*/) break;
+        if (file.peek() != '\n') i++;
     }
+/*debug*/Serial.printf("Seeked File Pos: %d\n", file.position());
     return i;
 }

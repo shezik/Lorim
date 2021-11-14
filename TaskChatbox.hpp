@@ -16,7 +16,7 @@ class TaskChatbox : public TaskBase {
         void allocateMem();
         void freeMem();
 
-        uint8_t seekPrevLine(File &file);
+        uint16_t seekToPrevPage(File &file);
 
     public:
         TaskChatbox(TaskManager &_parentManager, U8G2_DISPLAY_TYPE &_u8g2, Mailbox &_mailbox);
