@@ -9,22 +9,6 @@
 
 #define FORMAT_LITTLEFS_IF_FAILED true
 
-/*
-// esp8266 (deprecated)
-#define CH450_INT D0
-#define I2C_SDA D1
-#define I2C_SCL D2
-#define SPI_CLK D5
-#define SPI_DATA D7
-#define SPI_CS D8
-#define SPI_DC D6
-#define U8G2_DISPLAY_RESET U8X8_PIN_NONE
-#define LORA_CS 18
-#define LORA_RST 23
-#define LORA_DIO 26
-#define LORA_FREQ 470E6
-*/
-
 // esp32
 #define CH450_INT 34
 #define I2C_SDA 21

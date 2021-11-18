@@ -2,53 +2,51 @@
 
 ## *THIS IS A PLACEHOLDER FILE AND IS SUBJECT TO CHANGE AT ANY TIME*
 
-![NodeMCU Pin Definition](./devLayout.png "NodeMCU Pin Definition")
-
-- A0 - Random seed
-
------
-
-## Arduino defined pin aliases
-[common.h](./common.h)<br>
-[pins_arduino.h](./pins_arduino.h)
+![DOIT ESP32 DevKit V1 Pinout](./devLayout.png "DOIT ESP32 DevKit V1 Pinout")
 
 -----
 
 ## Keyboard scanner CH450 (I<sup>2</sup>C)
 *Will this work as an IO expander?*<br>
-*To add a few CS pins for multiple SPI clients.*<br>
-- D1 - SDA
-- D2 - SCL
+- D21 - SDA
+- D22 - SCL
+- D34 - Interrupt
 
 -----
 
-## Display LX-12864L-1 (SPI)
-| Arduino | Description  | Display |
-|---------|--------------|---------|
-| D5      | SCL          | 4       |
-| D6      | A0 (D/C)     | 3       |
-| D7      | SDA (MOSI)   | 5       |
-| D8      | CS           | 1       |
-| RST     | RST (unused) | 2       |
+## Display LX-12864L-1 (VSPI)
+| Arduino | Description                 | Display |
+|---------|-----------------------------|---------|
+| D18     | SCL                         | 4       |
+| D19     | D/C (MISO)                  | 3       |
+| D23     | SDA (MOSI)                  | 5       |
+| D5      | CS                          | 1       |
+| RST     | EN (Hardware reset button)  | 2       |
 
-*Please note that SD1, CMD, SD0, CLK pins are already occupied for communications between*<br>
-*the external flash chip and our esp8266 module, thus cannot work as user SPI port.*
+-----
+
+## SX1278 (HSPI)
+| Arduino | Description  | Module |
+|---------|--------------|--------|
+| D12     | MISO         | MISO   |
+| D13     | MOSI         | MOSI   |
+| D14     | CLK          | CLK    |
+| D15     | CS           | SEL    |
+| D36     | Module RST   | RST    |
+| D39     | Module DIO0  | DIO0   |
 
 -----
 
 ##  Reserved pins
-- D4 (Built-in LED)
-- D0 (Auxiliary built-in LED, USER, WAKE) **Temporarily CH450 interrupt, active low**
-- D9 (RXD)
-- D10 (TXD)
+Nothing.
 
 -----
 
 # Lorim file system structure
 LittleFS<br>
 &emsp;│<br>
-&emsp;├ settings.json<br>
+&emsp;├ history.txt<br>
 &emsp;|<br>
-&emsp;├ messages.json<br>
+&emsp;├ `<Pending>`<br>
 &emsp;|<br>
-&emsp;└ contacts.json
+&emsp;└ `<Pending>`

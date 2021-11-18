@@ -1,23 +1,6 @@
 # Sketchpad.
 
 ```
-uint16_t startPos = 0;
-uint16_t endPos;
-
-void printPage() {
-    endPos = startPos;
-    for (uint8_t i = 0; i < LINES_PER_PAGE; i++) {
-        endPos = printOneLine(Forward, endPos);
-    }
-}
-
-uint16_t printOneLine(enum direction, uint16_t _startPos) {
-    // some code
-    return _endPos;
-}
-```
-
-```
 static int8_t lastKeycode;
 static uint32_t lastMillis;
 
