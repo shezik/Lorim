@@ -55,7 +55,12 @@ uint16_t TaskChatbox::printPage(File &file, uint16_t _startPos) {
     u8g2.clearBuffer();
     uint16_t _endPos = _startPos;
     for (uint8_t i = 0; i < LINES_PER_PAGE; i++) {
-        _endPos = printLine(file, _endPos, (i + 1) * 8, true);
+        /*
+        uint8_t lineNum[2];
+        sprintf((char*)lineNum, "%d", i + 1);
+        u8g2.drawStr(0, i * 8, (const char*)lineNum);
+        */
+        _endPos = printLine(file, _endPos, i * 8, true);
     }
     u8g2.sendBuffer();
     return _endPos;
@@ -76,6 +81,7 @@ uint16_t TaskChatbox::printLine(File &file, uint16_t _startPos, uint8_t y, bool 
     while (1) {
         if (i == CHARS_PER_LINE) {
             buf[i] = '\0';
+            if (file.peek() == '\n') advanceCur();
             break;
         }
         if (file.peek() != '\n') {
@@ -96,7 +102,7 @@ uint16_t TaskChatbox::printLine(File &file, uint16_t _startPos, uint8_t y, bool 
 
 uint16_t TaskChatbox::findPrevLine(File &file, uint16_t _startPos) {
     file.seek(_startPos);
-    uint16_t i = 0;  // variable i is unused for nows
+    uint16_t i = 0;  // variable i is unused for now
 
     static auto decreaseCur = [&file]()->bool {
         if (file.position() == 0 || !file.seek(-1, SeekCur)) {  // attempt to move cursor backwards by 1
