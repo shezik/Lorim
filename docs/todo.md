@@ -1,5 +1,44 @@
 # Sketchpad.
 
+```
+uint16_t startPos = 0;
+uint16_t endPos;
+
+void printPage() {
+    endPos = startPos;
+    for (uint8_t i = 0; i < LINES_PER_PAGE; i++) {
+        endPos = printOneLine(Forward, endPos);
+    }
+}
+
+uint16_t printOneLine(enum direction, uint16_t _startPos) {
+    // some code
+    return _endPos;
+}
+```
+
+```
+static int8_t lastKeycode;
+static uint32_t lastMillis;
+
+int8_t keycode = getKeycode();
+
+if (keycode != -1) {
+    if (lastKeycode != keycode) {
+        lastKeycode = keycode;
+        lastMillis = millis();
+        handleKey(short, keycode);
+    } else {
+        if (millis() - lastMillis >= LONGPRESS_DURATION) {
+            handleKey(long, keycode);
+            lastMillis = millis();
+        }
+    }
+} else {
+    lastKeycode = -1;
+}
+```
+
 ## Depreciated
 
 temporary tasks (menu, chatbox, ime, etc.):
@@ -13,17 +52,6 @@ always ticked
 do not block (go into one's own loop). use status.
 
 **DO NOT DO EXCESSIVE CHECKS.**
-
-## UTC+8 20:40 Nov 8, 2021
-
-Mailbox: r/w chat history text file, provides chatbox with history, keeps number of new datagrams since last getNewMails
-
-TaskGEM: gets number of new datagrams and draws notifications on screen
-
-Filesystem FS();
-Mailbox mailbox(FS);
-TaskManager taskManager(u8g2, keyboard, mailbox);
-TaskChatbox taskChatbox(u8g2, keyboard, mailbox);
 
 ## README sketch underneath
 
