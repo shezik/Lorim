@@ -22,11 +22,13 @@ void TaskChatbox::freeMem() {
 }
 
 void TaskChatbox::init() {
-    u8g2.setFont(u8g2_font_5x7_tr);
+    mailbox.clearNewMsgCount();
+    u8g2.setFont(CHATBOX_FONT);
     u8g2.setFontMode(1);
     u8g2.setDrawColor(1);
     u8g2.clear();
     file = lilFS.open(HISTORY_PATH, "r");
+    startPos = findPrevPage(file, file.size());
     endPos = printPage(file, startPos);
     file.close();
 }
@@ -45,6 +47,9 @@ void TaskChatbox::tick(int16_t keycode) {
             endPos = printPage(file, startPos);
             file.close();
             break;
+        case 2:
+            (lilFS.open(HISTORY_PATH, "w+")).close();  // clear history data
+            break;
         case 7:
             parentManager.switchTo(ID_TASKGEM, true);
             break;
@@ -60,7 +65,7 @@ uint16_t TaskChatbox::printPage(File &file, uint16_t _startPos) {
         sprintf((char*)lineNum, "%d", i + 1);
         u8g2.drawStr(0, i * 8, (const char*)lineNum);
         */
-        _endPos = printLine(file, _endPos, i * 8, true);
+        _endPos = printLine(file, _endPos, i * CHATBOX_VERTICAL_PACE, true);
     }
     u8g2.sendBuffer();
     return _endPos;
@@ -133,7 +138,15 @@ uint16_t TaskChatbox::findPrevLine(File &file, uint16_t _startPos) {
     return prevEndPos;
 }
 
-
 uint16_t TaskChatbox::findNextLine(File &file, uint16_t _startPos) {
     return printLine(file, _startPos, 0, false);
+}
+
+uint16_t TaskChatbox::findPrevPage(File &file, uint16_t _startPos) {
+    file.seek(_startPos);
+    uint16_t _endPos = _startPos;
+    for (uint8_t i = 0; i < LINES_PER_PAGE; i++) {
+        _endPos = findPrevLine(file, _endPos);
+    }
+    return _endPos;
 }

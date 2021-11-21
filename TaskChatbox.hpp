@@ -25,6 +25,7 @@ class TaskChatbox : public TaskBase {
         uint16_t printLine(File &file, uint16_t _startPos, uint8_t y, bool doPrint);
         uint16_t findPrevLine(File &file, uint16_t _startPos);
         uint16_t findNextLine(File &file, uint16_t _startPos);
+        uint16_t findPrevPage(File &file, uint16_t _startPos);
 
     public:
         TaskChatbox(TaskManager &_parentManager, U8G2_DISPLAY_TYPE &_u8g2, Mailbox &_mailbox);
