@@ -24,6 +24,8 @@ TaskManager taskManager(u8g2, keyboard, mailbox);
 void initLL2();
 void saveSettings();
 
+uint8_t nodeShortMac[ADDR_LENGTH] = {0};
+
 void setup() {
 
     Serial.begin(115200);
@@ -34,7 +36,7 @@ void setup() {
         LittleFS.begin();
     }
     initLL2();
-    mailbox.init(Layer1, LL2);
+    mailbox.init(Layer1, LL2, nodeShortMac);
     taskManager.init();
 
 }
@@ -42,6 +44,14 @@ void setup() {
 void loop() {
     taskManager.tick();
     mailbox.tick();
+    // dummy beacon
+    //static uint32_t lastMillis = millis();
+    //if (millis() > lastMillis + 1000) {
+    //    Serial.printf("Test message sent!\n");
+    //    lastMillis = millis();
+    //    static uint8_t test_addr[4] = {0x12, 0x34, 0x56, 0x78};
+    //    mailbox.sendMessage("Hello LoRa!", test_addr, "Prototype");
+    //}
 }
 
 void initLL2() {
@@ -49,7 +59,11 @@ void initLL2() {
     char nodeAddress[ADDR_LENGTH*2 + 1] = {'\0'};
     uint8_t mac[6];
     WiFi.macAddress(mac);
+    for (uint8_t i = 0; i < ADDR_LENGTH; i++) {
+        nodeShortMac[i] = mac[i + 2];
+    }
     sprintf(nodeAddress, "%02x%02x%02x%02x", mac[2], mac[3], mac[4], mac[5]);
+    Serial.printf("\nnodeAddress: %s\n", nodeAddress);
     
     Layer1 = new Layer1Class(LoRaHSPI);
     LL2 = new LL2Class(Layer1);
