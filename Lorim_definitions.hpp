@@ -6,6 +6,8 @@
 
 #define CHARS_PER_LINE 25  // <=254
 #define LINES_PER_PAGE 8
+#define CHATBOX_FONT u8g2_font_5x7_tr
+#define CHATBOX_VERTICAL_PACE 8  // font height + 1
 
 #define FORMAT_LITTLEFS_IF_FAILED true
 
