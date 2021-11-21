@@ -25,7 +25,7 @@
 
 -----
 
-## SX1278 (HSPI)
+## LoRa Module SX1278 (HSPI)
 | Arduino | Description  | Module |
 |---------|--------------|--------|
 | D12     | MISO         | MISO   |
