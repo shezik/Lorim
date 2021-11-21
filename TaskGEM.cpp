@@ -115,21 +115,23 @@ void TaskGEM::tick(int16_t keycode) {
     if (newMsgCount && (validKeyPressed || (prevCount != newMsgCount))) {
         prevCount = newMsgCount;
 
-        char countStr[3] = "??";
+        char countStr[3] = "++";
         if (newMsgCount < 99) {
             sprintf(countStr, "%d", newMsgCount);
         }
-        u8g2.setFont(u8g2_font_5x7_tr);
+        u8g2.setFont(u8g2_font_5x7_mn);
         u8g2.setFontMode(1);
         u8g2.setDrawColor(1);  // do not use XOR, its behavior weird in this case :) try it and you'll see why.
 
         // adjust right margin according to digits
-        uint16_t width = u8g2.getDisplayWidth() - 11;
+        uint16_t width = u8g2.getDisplayWidth() - 8;
         if (newMsgCount > 9) {
-            width = width - 3;
+            width = width - 6;
         }
 
-        u8g2.drawButtonUTF8(width, u8g2.getDisplayHeight() - 11, U8G2_BTN_BW1, 0, 1, 1, countStr);  // !!
+        u8g2.clearBuffer();
+        menu->drawMenu();
+        u8g2.drawButtonUTF8(width, u8g2.getDisplayHeight() - 13, U8G2_BTN_BW1, 0, 1, 1, countStr);  // !!
         u8g2.sendBuffer();
     }
 }
