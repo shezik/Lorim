@@ -47,7 +47,7 @@ void Mailbox::tick() {
 void Mailbox::appendToHistory(char *message, uint8_t *address, char *username) {
     File historyFile = lilFS.open(HISTORY_PATH, "a");
 
-    historyFile.printf("\n\n");
+    historyFile.printf("\n");
 
     for (uint8_t i = 0; i < MAX_USERNAME_LENGTH + 1; i++) {
         if (username[i] == '\0') break;
