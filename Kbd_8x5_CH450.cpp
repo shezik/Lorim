@@ -107,9 +107,9 @@ uint8_t Kbd_8x5_CH450::toKeycode(uint8_t rawdata) {
     uint8_t col = (rawdata & 0b00000111) - 2;   // DIG
 
     if (row < 8 && col < 6) {
-        return row * 6 + col;
+        return row * 6 + col + 1;
     } else {
-        return -1;
+        return 0;
     }
 
 }

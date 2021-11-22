@@ -1,9 +1,19 @@
 #pragma once
 
+// TaskGEM
 #define GEM_DISABLE_GLCD
 #define GEM_DISABLE_ADAFRUIT_GFX
 #define U8G2_DISPLAY_TYPE U8G2_ST7565_JLX12864_F_4W_SW_SPI
 
+// TaskManager
+#define LONG_PRESS_DURATION 800
+// Task unique IDs
+#define ID_DEFAULT ID_TASKGEM
+#define ID_NONE    0
+#define ID_TASKGEM 1
+#define ID_CHATBOX 2
+
+// TaskChatbox
 #define CHARS_PER_LINE 25  // <=254
 #define LINES_PER_PAGE 8
 #define CHATBOX_FONT u8g2_font_5x7_tr
@@ -28,12 +38,7 @@
 #define LORA_DIO 39
 #define LORA_FREQ 470E6
 
-// Task unique IDs
-#define ID_DEFAULT ID_TASKGEM
-#define ID_NONE    0
-#define ID_TASKGEM 1
-#define ID_CHATBOX 2
-
+// Mailbox
 #define ARDUINO_LORA
 #define MAX_USERNAME_LENGTH 10
 #define HISTORY_PATH "/history.txt"

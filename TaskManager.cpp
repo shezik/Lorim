@@ -20,10 +20,30 @@ void TaskManager::init() {
 }
 
 void TaskManager::tick() {
-    int16_t keycode = -1;  // pass in -1 if no key is down
 
+    int16_t keycode = 0;  // pass in 0 if no key is down
+
+    static bool processKey = false;
+    static uint32_t lastMillis = millis();
+    
     if (!digitalRead(CH450_INT)) {  // active low
-        keycode = Kbd_8x5_CH450::toKeycode(keyboard.getKeyData());
+        Serial.printf("new key pressed\n");  // debug
+        lastMillis = millis();
+        processKey = true;
+        keyboard.getKeyData();  // dismiss new key interrupt state
+    } else if (processKey) {
+        if (millis() - lastMillis >= LONG_PRESS_DURATION) {
+            keycode = -(Kbd_8x5_CH450::toKeycode(keyboard.getKeyData()));
+            processKey = false;
+            Serial.printf("long press registered, keycode is %d\n", keycode);  // debug
+        } else {
+            uint8_t keyData = keyboard.getKeyData();
+            if (!Kbd_8x5_CH450::toState(keyData)) {
+                keycode = Kbd_8x5_CH450::toKeycode(keyData);
+                processKey = false;
+                Serial.printf("short press registered, keycode is %d\n", keycode);  // debug
+            }
+        }
     }
 
     if (deleteTaskNextTick) {
@@ -40,6 +60,7 @@ void TaskManager::tick() {
     } else {
         launchTask(ID_DEFAULT, false);
     }
+
 }
 
 void TaskManager::launchTask(uint8_t taskID, bool nextTick) {  // register new tasks here
