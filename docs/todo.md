@@ -1,27 +1,5 @@
 # Sketchpad.
 
-```
-static int8_t lastKeycode;
-static uint32_t lastMillis;
-
-int8_t keycode = getKeycode();
-
-if (keycode != -1) {
-    if (lastKeycode != keycode) {
-        lastKeycode = keycode;
-        lastMillis = millis();
-        handleKey(short, keycode);
-    } else {
-        if (millis() - lastMillis >= LONGPRESS_DURATION) {
-            handleKey(long, keycode);
-            lastMillis = millis();
-        }
-    }
-} else {
-    lastKeycode = -1;
-}
-```
-
 ## Depreciated
 
 temporary tasks (menu, chatbox, ime, etc.):
@@ -37,6 +15,10 @@ do not block (go into one's own loop). use status.
 **DO NOT DO EXCESSIVE CHECKS.**
 
 ## README sketch underneath
+
+millis() values are stored in uint32_t variables which stands for around 49 days before overflowing. Change it to uint64_t if necessary. (lasts for ... a long time.)
+
+Lorim utilizes a 4x4 keyboard, keys numbered from 1 to 16. The 6x8 keycode mapping array is defined in [Kbd_8x5_CH450.cpp](../Kbd_8x5_CH450.cpp).
 
 # Components and their jobs
 

@@ -16,7 +16,7 @@ class Mailbox {
     public:
         Mailbox(FS &_littleFS);
         ~Mailbox();
-        void init(Layer1Class *_Layer1, LL2Class *_LL2, uint8_t *_nodeShortMac);  // create file if not exist
+        void init(Layer1Class *_Layer1, LL2Class *_LL2, uint8_t *_nodeShortMac);
         void tick();
         void sendMessage(char* message, uint8_t *myAddress, char *myUsername, uint8_t *destination = BROADCAST);
         uint8_t* getNodeShortMac();

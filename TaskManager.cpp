@@ -25,12 +25,12 @@ void TaskManager::tick() {
 
     static bool processKey = false;
     static uint32_t lastMillis = millis();
-    
+
     if (!digitalRead(CH450_INT)) {  // active low
+        keyboard.getKeyData();  // dismiss new key interrupt state
         Serial.printf("new key pressed\n");  // debug
         lastMillis = millis();
         processKey = true;
-        keyboard.getKeyData();  // dismiss new key interrupt state
     } else if (processKey) {
         if (millis() - lastMillis >= LONG_PRESS_DURATION) {
             keycode = -(Kbd_8x5_CH450::toKeycode(keyboard.getKeyData()));

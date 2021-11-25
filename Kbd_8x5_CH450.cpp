@@ -103,11 +103,24 @@ bool Kbd_8x5_CH450::toState(uint8_t rawdata) {
 
 uint8_t Kbd_8x5_CH450::toKeycode(uint8_t rawdata) {
 
+    // !! Edit your key bindings here
+    static const int8_t keycodeArray[8][6] = {
+        { 1,  2,  3,  4, 0, 0},
+        { 5,  6,  7,  8, 0, 0},
+        { 9, 10, 11, 12, 0, 0},
+        {13, 14, 15, 16, 0, 0},
+        { 0,  0,  0,  0, 0, 0},
+        { 0,  0,  0,  0, 0, 0},
+        { 0,  0,  0,  0, 0, 0},
+        { 0,  0,  0,  0, 0, 0}
+    };
+
     uint8_t row = (rawdata & 0b00111000) >> 3;  // SEG
     uint8_t col = (rawdata & 0b00000111) - 2;   // DIG
 
     if (row < 8 && col < 6) {
-        return row * 6 + col + 1;
+        // return row * 6 + col + 1;
+        return keycodeArray[row][col];
     } else {
         return 0;
     }
