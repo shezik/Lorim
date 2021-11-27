@@ -6,7 +6,7 @@
 #define U8G2_DISPLAY_TYPE U8G2_ST7565_JLX12864_F_4W_SW_SPI
 
 // TaskManager
-#define LONG_PRESS_DURATION 800
+#define LONG_PRESS_DURATION 800/*ms*/
 // Task unique IDs
 #define ID_DEFAULT ID_TASKGEM
 #define ID_NONE    0
@@ -21,6 +21,10 @@
 
 #define FORMAT_LITTLEFS_IF_FAILED true
 
+// Multitap IM
+#define MAX_INPUT_LENGTH 128  // size stored as uint8_t
+#define SELECTION_TIMEOUT 500/*ms*/
+
 // esp32
 #define CH450_INT 34
 #define I2C_SDA 21
@@ -33,7 +37,7 @@
 #define HSPI_MISO 12
 #define HSPI_MOSI 13
 #define HSPI_CLK 14
-#define LORA_CS 15  // HSPI_CS0
+#define LORA_CS 15   // HSPI_CS0
 #define LORA_RST 36
 #define LORA_DIO 39
 #define LORA_FREQ 470E6
