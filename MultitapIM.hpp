@@ -23,15 +23,16 @@ class MultitapIM {
     bool charPending;  // pending selection or not
     uint8_t pressCount;
     uint32_t lastMillis;
-    int8_t lastKeycode;
+    int16_t lastKeycode;
     uint8_t lastPos;
     uint8_t tickCount;
     char lastChar;
+    bool showingCursor;  // !! necessary?
 
-    char parseKeyMapping(char* (*mapping)[3], uint8_t* count, int8_t key, uint8_t mode);
+    char parseKeyMapping(char* (*mapping)[3], uint8_t* count, int16_t key, uint8_t mode);
 
     public:
-    void tick(int8_t keycode);
+    void tick(int16_t keycode);
     bool bind(char* destStr, uint8_t size);
     void unbind();
     char* getInputModeAsStr();

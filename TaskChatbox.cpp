@@ -14,11 +14,11 @@ TaskChatbox::~TaskChatbox() {
 }
 
 void TaskChatbox::allocateMem() {
-
+    multitapIM = new MultitapIM();
 }
 
 void TaskChatbox::freeMem() {
-
+    delete multitapIM; multitapIM = nullptr;
 }
 
 void TaskChatbox::init() {
@@ -34,25 +34,43 @@ void TaskChatbox::init() {
 }
 
 void TaskChatbox::tick(int16_t keycode) {
-    switch (keycode) {
-        case 1:
-            file = lilFS.open(HISTORY_PATH, "r");
-            startPos = findPrevLine(file, startPos);
-            endPos = printPage(file, startPos);
-            file.close();
-            break;
-        case 2:
-            file = lilFS.open(HISTORY_PATH, "r");
-            startPos = findNextLine(file, startPos);
-            endPos = printPage(file, startPos);
-            file.close();
-            break;
-        case 3:
-            (lilFS.open(HISTORY_PATH, "w+")).close();  // clear history data
-            break;
-        case 8:
-            parentManager.switchTo(ID_TASKGEM, true);
-            break;
+    if (editMode) {
+        switch (keycode) {
+            case 13:
+                Serial.printf("Exiting to normal mode\n");
+                multitapIM->unbind();
+                editMode = false;
+                break;
+            default:
+                if (keycode != 0) Serial.printf("multitapIM->tick(%d)\n", keycode);
+                multitapIM->tick(keycode);
+        }
+        Serial.printf("inputBuffer: %s\n", inputBuffer);
+    } else {
+        switch (keycode) {
+            case 1:
+                file = lilFS.open(HISTORY_PATH, "r");
+                startPos = findPrevLine(file, startPos);
+                endPos = printPage(file, startPos);
+                file.close();
+                break;
+            case 2:
+                file = lilFS.open(HISTORY_PATH, "r");
+                startPos = findNextLine(file, startPos);
+                endPos = printPage(file, startPos);
+                file.close();
+                break;
+            case 3:
+                (lilFS.open(HISTORY_PATH, "w+")).close();  // clear history data
+                break;
+            case 4:
+                Serial.printf("Entering edit mode\nmultitapIM->bind() returned %d\n", multitapIM->bind(inputBuffer, MAX_INPUT_LENGTH + 1));
+                editMode = true;
+                break;
+            case 8:
+                parentManager.switchTo(ID_TASKGEM, true);
+                break;
+        }
     }
 }
 

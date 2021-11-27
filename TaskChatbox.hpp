@@ -5,6 +5,7 @@
 #include "TaskBase.hpp"
 #include "Mailbox.hpp"
 #include "TaskManager.hpp"
+#include "MultitapIM.hpp"
 
 class TaskChatbox : public TaskBase {
     private:
@@ -13,6 +14,7 @@ class TaskChatbox : public TaskBase {
         Mailbox &mailbox;
         FS &lilFS;
         File file;
+        MultitapIM *multitapIM;
 
         void allocateMem();
         void freeMem();
@@ -20,6 +22,9 @@ class TaskChatbox : public TaskBase {
         // left and right border of printPage file position range
         uint16_t startPos = 0;
         uint16_t endPos;
+
+        char inputBuffer[MAX_INPUT_LENGTH + 1] = {'\0'};
+        bool editMode = false;
 
         uint16_t printPage(File &file, uint16_t _startPos);
         uint16_t printLine(File &file, uint16_t _startPos, uint8_t y, bool doPrint);
