@@ -23,7 +23,7 @@
 
 // Multitap IM
 #define MAX_INPUT_LENGTH 128  // size stored as uint8_t
-#define SELECTION_TIMEOUT 500/*ms*/
+#define SELECTION_TIMEOUT 2000/*ms*/
 
 // esp32
 #define CH450_INT 34

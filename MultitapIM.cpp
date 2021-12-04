@@ -3,9 +3,9 @@
 void MultitapIM::tick(int16_t keycode) {
     if (!str) return;
 
+    /*
     if (charPending && keycode != 0 && lastKeycode != keycode) {
-        Serial.printf("New key pressed\n");
-        lastKeycode = keycode;
+        Serial.printf("New key pressed, lastKeycode is %d, new keycode is %d\n", lastKeycode, keycode);
         charPending = false;
         pressCount = 0;
         if (pos + 2 != strSize) pos++;
@@ -17,11 +17,26 @@ void MultitapIM::tick(int16_t keycode) {
         pressCount = 0;
         if (pos + 2 != strSize) pos++;
     }
+    */
+
+    // simplified
+    if (charPending && ((keycode != 0 && lastKeycode != keycode) || (millis() >= lastMillis + SELECTION_TIMEOUT))) {
+        charPending = false;
+        pressCount = 0;
+        if (pos + 2 != strSize) pos++;
+    }
 
     if (keycode != 0) {
         char keyChar = parseKeyMapping(keyMapping, &pressCount, keycode, inputMode);
         Serial.printf("keyChar: %d\n", keyChar);
         switch (keyChar) {
+            case '\0':  // stop pending prematurely
+                if (pos + 1 < strSize) {
+                    lastKeycode = keycode;
+                    lastMillis = millis();
+                    charPending = true;
+                }
+                break;
             case '\x01':
                 break;
             case '\x02':
@@ -36,6 +51,7 @@ void MultitapIM::tick(int16_t keycode) {
                         str[pos + 1] = '\0';
                         maxPos = pos;
                     }
+                    lastKeycode = keycode;
                     lastMillis = millis();
                     charPending = true;
                     pressCount++;
@@ -90,8 +106,60 @@ void MultitapIM::unbind() {
     str = nullptr;
 }
 
-char MultitapIM::parseKeyMapping(char* (*mapping)[3], uint8_t* count, int16_t key, uint8_t mode) {
-    return 'x';  // !! awaiting implementation
+char MultitapIM::parseKeyMapping(char** mapping, uint8_t* count, int16_t key, uint8_t mode) {  // !! awaiting optimization
+    if (key > 12 || key < -12 || key == 0) return '?';
+
+    if (key < 0) {key = -key; mode = 3;}  // !! expand later
+
+    key--;
+
+    int8_t lowercaseLen, uppercaseLen, longpressLen;
+    uint8_t pos;
+    
+    for (lowercaseLen = 0; mapping[key][lowercaseLen] != '\n'; lowercaseLen++) {
+        if (mapping[key][lowercaseLen] == '\0') {lowercaseLen = -1; break;}
+    }
+    for (uppercaseLen = 0; mapping[key][uppercaseLen + lowercaseLen + 1] != '\r'; uppercaseLen++) {
+        if (mapping[key][uppercaseLen + lowercaseLen + 1] == '\0') {uppercaseLen = -1; break;}
+    }
+    for (longpressLen = 0; mapping[key][longpressLen + lowercaseLen + uppercaseLen + 2] != '\0'; longpressLen++);
+
+    Serial.printf("lowercaseLen: %d, uppercaseLen: %d, longpressLen: %d\n", lowercaseLen, uppercaseLen, longpressLen);
+
+    switch (inputMode) {
+        case 0:
+            if (lowercaseLen <= 0) {
+                *count = 0;
+                return '\0';
+            } else {
+                *count %= lowercaseLen;
+                pos = *count;
+            }
+            break;
+        case 1:
+            // !! awaiting implementation
+        case 2:
+            if (uppercaseLen <= 0) {
+                *count = 0;
+                return '\0';
+            } else {
+                *count %= uppercaseLen;
+                pos = lowercaseLen + 1 + *count;
+            }
+            break;
+        case 3:
+            if (longpressLen <= 0) {
+                *count = 0;
+                return '\0';
+            } else {
+                *count %= longpressLen;
+                pos = lowercaseLen + uppercaseLen + 2 + *count;
+            }
+            break;
+    }
+
+    return mapping[key][pos];
+
 }
 
 char* MultitapIM::getInputModeAsStr() {

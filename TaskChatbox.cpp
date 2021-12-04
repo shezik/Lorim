@@ -37,15 +37,28 @@ void TaskChatbox::tick(int16_t keycode) {
     if (editMode) {
         switch (keycode) {
             case 13:
-                Serial.printf("Exiting to normal mode\n");
+                Serial.printf("Edit cancelled\n");
                 multitapIM->unbind();
                 editMode = false;
+                inputBuffer[0] = '\0';
+                break;
+            case 14:
+                Serial.printf("Edit confirmed\n");
+                multitapIM->unbind();
+                editMode = false;
+                mailbox.sendMessage(inputBuffer, mailbox.getNodeShortMac(), "Prototype");
+                inputBuffer[0] = '\0';
                 break;
             default:
                 if (keycode != 0) Serial.printf("multitapIM->tick(%d)\n", keycode);
                 multitapIM->tick(keycode);
+                u8g2.setDrawColor(0);
+                u8g2.drawBox(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE, u8g2.getDisplayWidth(), CHATBOX_VERTICAL_PACE);
+                u8g2.setDrawColor(1);
+                u8g2.drawStr(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE, inputBuffer);
+                u8g2.sendBuffer();
         }
-        Serial.printf("inputBuffer: %s\n", inputBuffer);
+        //Serial.printf("inputBuffer: %s\n", inputBuffer);
     } else {
         switch (keycode) {
             case 1:
