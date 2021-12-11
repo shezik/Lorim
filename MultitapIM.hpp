@@ -8,12 +8,16 @@ class MultitapIM {
     char* str = nullptr;
     uint8_t strSize;
     uint8_t pos;
-    uint8_t maxPos;  // maxPos + 1 = inputLength
-    char* keyMapping[12] = {  // syntax: (lowercase)\n(uppercase)\r(long-press)
-        ".,?!():\"\r1",  "abc\nABC\r2", "def\nDEF\r3",
+    int16_t maxPos;  // pos of last non-\0 character
+    char* keyMapping[12] = {    // syntax:  
+                                // 1. (lowercase)\n(uppercase)\r(long-press);
+                                // 2. (lowercase)\n(long-press);
+                                // 3. (uppercase)\r(long-press);
+                                // 4. long-presses can be removed too.
+        ".,?!():\"\n1",  "abc\nABC\r2", "def\nDEF\r3",
         "ghi\nGHI\r4",   "jkl\nJKL\r5", "mno\nMNO\r6",
         "pqrs\nPQRS\r7", "tuv\nTUV\r8", "wxyz\nWXYZ\r9",
-        "\x01\r*",       " \r0",        "\x02\r#"
+        "\x01\n*",       " \n0",        "\x02\n#"
     };
     uint8_t inputMode = 0;  // 0 - abc
                             // 1 - Abc

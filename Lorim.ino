@@ -44,14 +44,16 @@ void setup() {
 void loop() {
     taskManager.tick();
     mailbox.tick();
-    // dummy beacon
-    //static uint32_t lastMillis = millis();
-    //if (millis() > lastMillis + 1000) {
-    //    Serial.printf("Test message sent!\n");
-    //    lastMillis = millis();
-    //    static uint8_t test_addr[4] = {0x12, 0x34, 0x56, 0x78};
-    //    mailbox.sendMessage("Hello LoRa!", test_addr, "Prototype");
-    //}
+    // dummy code for flashing onto bare devkits to test transmitting range
+    #ifdef DUMMY_BEACON
+    static uint32_t lastMillis = millis();
+    if (millis() > lastMillis + 1000) {
+        Serial.printf("Test message sent!\n");
+        lastMillis = millis();
+        static uint8_t test_addr[4] = {0x12, 0x34, 0x56, 0x78};
+        mailbox.sendMessage("Hello LoRa!", test_addr, "Prototype");
+    }
+    #endif
 }
 
 void initLL2() {
