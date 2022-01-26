@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <SPI.h>
-#include <GEM_u8g2.h>
+#include <U8g2lib.h>
 #include <cstring>
 #include "Layer1_LoRa.h"
 #include "LoRaLayer2.h"
@@ -11,13 +11,14 @@
 #include "Kbd_8x5_CH450.hpp"
 #include "TaskManager.hpp"
 #include "Mailbox.hpp"
+#include "SpicedU8g2.hpp"
 
 Layer1Class *Layer1;
 LL2Class *LL2;
 
 SPIClass LoRaHSPI(HSPI);
 Kbd_8x5_CH450 keyboard(I2C_SDA, I2C_SCL, /*freq=1E6?*/5000);
-U8G2_DISPLAY_TYPE u8g2(U8G2_R2, VSPI_CLK, VSPI_DATA, VSPI_CS, VSPI_DC, U8G2_DISPLAY_RESET);
+SpicedU8g2 u8g2(U8G2_R2, VSPI_CLK, VSPI_DATA, VSPI_CS, VSPI_DC, U8G2_DISPLAY_RESET);
 Mailbox mailbox(LittleFS);
 TaskManager taskManager(u8g2, keyboard, mailbox);
 
@@ -31,19 +32,21 @@ void setup() {
     Serial.begin(115200);
     u8g2.begin();
     if (!LittleFS.begin(/*FORMAT_LITTLEFS_IF_FAILED*/)) {
+        Serial.printf("Formatting LittleFS\n");
         LittleFS.format();
-        Serial.printf("Formatted LittleFS\n");
         LittleFS.begin();
     }
     initLL2();
     mailbox.init(Layer1, LL2, nodeShortMac);
     taskManager.init();
+    u8g2.proxyInit(&mailbox, &taskManager);
 
 }
 
 void loop() {
     taskManager.tick();
     mailbox.tick();
+    u8g2.tick();
     // dummy code for flashing onto bare devkits to test transmitting range
     #ifdef DUMMY_BEACON
     static uint32_t lastMillis = millis();

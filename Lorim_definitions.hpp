@@ -1,5 +1,8 @@
 #pragma once
 
+#define LORIM_VERSION "v0.1"
+#define FORMAT_LITTLEFS_IF_FAILED true
+
 // TaskGEM
 #define GEM_DISABLE_GLCD
 #define GEM_DISABLE_ADAFRUIT_GFX
@@ -18,8 +21,6 @@
 #define LINES_PER_PAGE 8
 #define CHATBOX_FONT u8g2_font_5x7_tr
 #define CHATBOX_VERTICAL_PACE 8  // font height + 1
-
-#define FORMAT_LITTLEFS_IF_FAILED true
 
 // Multitap IM
 #define MAX_INPUT_LENGTH 128  // size stored as uint8_t
@@ -46,3 +47,7 @@
 #define ARDUINO_LORA
 #define MAX_USERNAME_LENGTH 10
 #define HISTORY_PATH "/history.txt"
+
+// SpicedU8g2
+#define STATUSBAR_FONT u8g2_font_micro_tr
+#define STATUSBAR_FONTHEIGHT 5

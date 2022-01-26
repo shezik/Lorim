@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Lorim_definitions.hpp"
-#include <GEM_u8g2.h>
+#include "GEMProxy.hpp"
 #include "TaskBase.hpp"
 #include "Mailbox.hpp"
 #include "TaskManager.hpp"
@@ -16,7 +16,7 @@ class TaskGEM : public TaskBase {
         U8G2_DISPLAY_TYPE &u8g2;
         Mailbox &mailbox;
 
-        GEM_u8g2 *menu;
+        GEMProxy *menu;
         // Pages
         GEMPage *pageMain;
         GEMPage *pageSettings;
@@ -36,6 +36,7 @@ class TaskGEM : public TaskBase {
         ~TaskGEM() override;
         void init() override;
         void tick(int16_t keycode) override;
+        void refreshDisplay() override;
         uint8_t getTaskID() override {return ID_TASKGEM;}
 
         static void setContrast_Callback();  // static foobar_Callback() and foobar() come in pairs.

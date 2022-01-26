@@ -87,6 +87,12 @@ void TaskChatbox::tick(int16_t keycode) {
     }
 }
 
+void TaskChatbox::refreshDisplay() {
+    file = lilFS.open(HISTORY_PATH, "r");
+    printPage(file, startPos);
+    file.close();
+}
+
 uint16_t TaskChatbox::printPage(File &file, uint16_t _startPos) {
     u8g2.clearBuffer();
     uint16_t _endPos = _startPos;

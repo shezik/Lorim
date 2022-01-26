@@ -2,7 +2,7 @@
 
 #include "Lorim_definitions.hpp"
 #include "Kbd_8x5_CH450.hpp"
-#include <GEM_u8g2.h>
+#include <U8g2lib.h>
 #include "Mailbox.hpp"
 #include "TaskBase.hpp"
 
@@ -31,4 +31,5 @@ class TaskManager {
         void tick();
         void switchTo(uint8_t taskID, bool nextTick);
         uint8_t getCurrentTaskID();
+        void refreshDisplay();
 };

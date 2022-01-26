@@ -18,8 +18,8 @@ TaskGEM::~TaskGEM() {
 }
 
 void TaskGEM::allocateMem() {
-    menu = new GEM_u8g2(u8g2, /*menuPointerType=*/GEM_POINTER_DASH, /*menuItemsPerScreen=*/7, /*menuItemsPerScreen*/8, /*menuPageScreenTopOffset*/8, /*menuValuesLeftOffset*/80);
-    pageMain = new GEMPage("Lorim v0.1");
+    menu = new GEMProxy(u8g2, /*menuPointerType=*/GEM_POINTER_DASH, /*menuItemsPerScreen=*/7, /*menuItemsPerScreen*/8, /*menuPageScreenTopOffset*/8, /*menuValuesLeftOffset*/80);
+    pageMain = new GEMPage("Lorim " LORIM_VERSION);
     pageSettings = new GEMPage("Settings");
     pageItemMainChatbox = new GEMItem("Chatbox", switchToChatbox_Callback);
     pageItemMainSettings = new GEMItem("Settings", pageSettings);
@@ -67,6 +67,10 @@ void TaskGEM::setContrast() {
     u8g2.setContrast(displayContrast);
 }
 
+void TaskGEM::refreshDisplay() {
+    menu->drawMenu();
+}
+
 void TaskGEM::tick(int16_t keycode) {
 
     bool validKeyPressed = false;
@@ -101,6 +105,7 @@ void TaskGEM::tick(int16_t keycode) {
         }
     }
 
+/*
     static uint8_t newMsgCount = 0;
     static uint8_t prevCount = 0;
     static uint8_t tickCount = 11;  // triggers update on first launch
@@ -134,4 +139,5 @@ void TaskGEM::tick(int16_t keycode) {
         u8g2.drawButtonUTF8(width, u8g2.getDisplayHeight() - 13, U8G2_BTN_BW1, 0, 1, 1, countStr);  // !!
         u8g2.sendBuffer();
     }
+*/
 }

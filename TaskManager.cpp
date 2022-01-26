@@ -27,7 +27,7 @@ void TaskManager::tick() {
     static uint32_t lastMillis = millis();
 
     if (!digitalRead(CH450_INT)) {  // active low
-        keyboard.getKeyData();  // dismiss new key interrupt state
+        keyboard.getKeyData();  // clear CH450 interrupt state
         Serial.printf("new key pressed\n");  // debug
         lastMillis = millis();
         processKey = true;
@@ -101,4 +101,10 @@ uint8_t TaskManager::getCurrentTaskID() {
 void TaskManager::switchTo(uint8_t taskID, bool nextTick) {
     deleteCurrentTask(nextTick);
     launchTask(taskID, nextTick);
+}
+
+void TaskManager::refreshDisplay() {
+    if (currentTask) {
+        currentTask->refreshDisplay();
+    }
 }

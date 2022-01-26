@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Lorim_definitions.hpp"
-#include <GEM_u8g2.h>
 #include "TaskBase.hpp"
 #include "Mailbox.hpp"
 #include "TaskManager.hpp"
@@ -37,6 +36,7 @@ class TaskChatbox : public TaskBase {
         ~TaskChatbox() override;
         void init() override;
         void tick(int16_t keycode) override;
+        void refreshDisplay() override;
         uint8_t getTaskID() override {return ID_CHATBOX;}
 
 };
