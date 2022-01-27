@@ -22,9 +22,10 @@
 #define CHATBOX_FONT u8g2_font_5x7_tr
 #define CHATBOX_VERTICAL_PACE 8  // font height + 1
 
-// Multitap IM
+// MultitapIM
 #define MAX_INPUT_LENGTH 128  // size stored as uint8_t
 #define SELECTION_TIMEOUT 2000/*ms*/
+#define CURSOR_TICK_INTERVAL 200/*ticks*/
 
 // esp32
 #define CH450_INT 34

@@ -29,12 +29,17 @@ void TaskChatbox::setDrawingStyle() {
 
 void TaskChatbox::init() {
     mailbox.clearNewMsgCount();
-    setDrawingStyle();
     u8g2.clear();
-    refreshDisplay(true);
+    setDrawingStyle();
+    refreshDisplay(End);
 }
 
 void TaskChatbox::tick(int16_t keycode) {
+    if (mailbox.getNewMsgCount()) {
+        mailbox.clearNewMsgCount();
+        refreshDisplay(End);
+    }
+
     if (editMode) {
         switch (keycode) {
             case 13:
@@ -42,7 +47,7 @@ void TaskChatbox::tick(int16_t keycode) {
                 multitapIM->unbind();
                 editMode = false;
                 inputBuffer[0] = '\0';
-                refreshDisplay(true);
+                refreshDisplay(End);
                 break;
             case 14:
                 Serial.printf("Edit confirmed\n");
@@ -50,34 +55,41 @@ void TaskChatbox::tick(int16_t keycode) {
                 editMode = false;
                 mailbox.sendMessage(inputBuffer, mailbox.getNodeShortMac(), "Prototype");
                 inputBuffer[0] = '\0';
-                refreshDisplay(true);
+                refreshDisplay(End);
                 break;
             default:
                 if (keycode != 0) Serial.printf("multitapIM->tick(%d)\n", keycode);
                 multitapIM->tick(keycode);
+
                 u8g2.setDrawColor(0);
                 u8g2.drawBox(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE, u8g2.getDisplayWidth(), CHATBOX_VERTICAL_PACE);
+                
                 u8g2.setDrawColor(1);
                 u8g2.drawHLine(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE - 1, u8g2.getDisplayWidth());
                 u8g2.drawStr(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE, inputBuffer);
+
                 u8g2.drawElements(StatusBar);
                 setDrawingStyle();
-                u8g2.sendBuffer();
+                
+                bool shouldUpdate = false;
+                for (uint8_t i = 0; i < MAX_INPUT_LENGTH + 1; i++) {  // last byte is definitely '\0' though... doesn't matter.
+                    if (oldInputBuffer[i] != inputBuffer[i]) {
+                        oldInputBuffer[i] = inputBuffer[i];
+                        shouldUpdate = true;
+                    }
+                }
+
+                if (shouldUpdate)
+                    u8g2.sendBuffer();
         }
         //Serial.printf("inputBuffer: %s\n", inputBuffer);
     } else {
         switch (keycode) {
             case 1:
-                file = lilFS.open(HISTORY_PATH, "r");
-                startPos = findPrevLine(file, startPos);
-                endPos = printPage(file, startPos);
-                file.close();
+                refreshDisplay(PrevLine);
                 break;
             case 2:
-                file = lilFS.open(HISTORY_PATH, "r");
-                startPos = findNextLine(file, startPos);
-                endPos = printPage(file, startPos);
-                file.close();
+                refreshDisplay(NextLine);
                 break;
             case 3:
                 (lilFS.open(HISTORY_PATH, "w+")).close();  // clear history data
@@ -94,31 +106,45 @@ void TaskChatbox::tick(int16_t keycode) {
 }
 
 void TaskChatbox::refreshDisplay() {
-    refreshDisplay(false);
+    refreshDisplay(None);
 }
 
-void TaskChatbox::refreshDisplay(bool goToBottom) {
+void TaskChatbox::refreshDisplay(scrollDirection direction) {
     file = lilFS.open(HISTORY_PATH, "r");
-    if (goToBottom)
-        startPos = findPrevPage(file, file.size());
-    endPos = printPage(file, startPos);
+    switch (direction) {
+        case None:
+            break;
+        case PrevLine:
+            filePointer = findPrevLine(file, filePointer);
+            break;
+        case NextLine:
+            filePointer = findNextLine(file, filePointer);
+            break;
+        case PrevPage:
+            filePointer = findPrevPage(file, filePointer);
+            break;
+        case NextPage:
+            filePointer = findNextPage(file, filePointer);
+        case Beginning:
+            filePointer = 0;
+            break;
+        case End:
+            filePointer = findPrevPage(file, file.size());
+            break;
+    }
+    u8g2.clearBuffer();
+    printPage(file, filePointer);
+    u8g2.drawElements(StatusBar);
+    setDrawingStyle();  // after calling drawElements()
+    u8g2.sendBuffer();
     file.close();
 }
 
 uint16_t TaskChatbox::printPage(File &file, uint16_t _startPos) {
-    u8g2.clearBuffer();
     uint16_t _endPos = _startPos;
     for (uint8_t i = 0; i < LINES_PER_PAGE; i++) {
-        /*
-        uint8_t lineNum[2];
-        sprintf((char*)lineNum, "%d", i + 1);
-        u8g2.drawStr(0, i * 8, (const char*)lineNum);
-        */
         _endPos = printLine(file, _endPos, i * CHATBOX_VERTICAL_PACE, true);
     }
-    u8g2.drawElements(StatusBar);
-    setDrawingStyle();
-    u8g2.sendBuffer();
     return _endPos;
 }
 
@@ -194,10 +220,18 @@ uint16_t TaskChatbox::findNextLine(File &file, uint16_t _startPos) {
 }
 
 uint16_t TaskChatbox::findPrevPage(File &file, uint16_t _startPos) {
-    file.seek(_startPos);
+    //file.seek(_startPos);
     uint16_t _endPos = _startPos;
     for (uint8_t i = 0; i < LINES_PER_PAGE; i++) {
         _endPos = findPrevLine(file, _endPos);
+    }
+    return _endPos;
+}
+
+uint16_t TaskChatbox::findNextPage(File &file, uint16_t _startPos) {
+    uint16_t _endPos = _startPos;
+    for (uint8_t i = 0; i < LINES_PER_PAGE; i++) {
+        _endPos = findNextLine(file, _startPos);
     }
     return _endPos;
 }

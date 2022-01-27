@@ -28,7 +28,7 @@ class MultitapIM {
     uint32_t lastMillis;
     int16_t lastKeycode;
     uint8_t lastPos;
-    uint8_t tickCount;
+    uint16_t tickCount;
     char lastChar;
     bool showingCursor;  // !! necessary?
 

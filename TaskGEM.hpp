@@ -8,7 +8,7 @@
 
 class TaskGEM : public TaskBase {
     private:
-        int displayContrast = 191;  // Fallback value
+        int displayContrast = 223;  // Fallback value
         static TaskGEM *callbackContext;  // Save the memory address of (the only, if not less) instance
                                           // so that static callback methods could locate it.
 

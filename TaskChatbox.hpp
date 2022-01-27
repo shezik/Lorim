@@ -7,6 +7,10 @@
 #include "MultitapIM.hpp"
 #include "SpicedU8g2.hpp"
 
+enum scrollDirection {
+    None, PrevLine, NextLine, PrevPage, NextPage, Beginning, End
+};
+
 class TaskChatbox : public TaskBase {
     private:
         TaskManager &parentManager;
@@ -21,10 +25,10 @@ class TaskChatbox : public TaskBase {
         void setDrawingStyle();
 
         // left and right border of printPage file position range
-        uint16_t startPos = 0;
-        uint16_t endPos;
+        uint16_t filePointer = 0;
 
         char inputBuffer[MAX_INPUT_LENGTH + 1] = {'\0'};
+        char oldInputBuffer[MAX_INPUT_LENGTH + 1] = {'\0'};
         bool editMode = false;
 
         uint16_t printPage(File &file, uint16_t _startPos);
@@ -32,6 +36,7 @@ class TaskChatbox : public TaskBase {
         uint16_t findPrevLine(File &file, uint16_t _startPos);
         uint16_t findNextLine(File &file, uint16_t _startPos);
         uint16_t findPrevPage(File &file, uint16_t _startPos);
+        uint16_t findNextPage(File &file, uint16_t _startPos);
 
     public:
         TaskChatbox(TaskManager &_parentManager, SpicedU8g2 &_u8g2, Mailbox &_mailbox);
@@ -39,7 +44,7 @@ class TaskChatbox : public TaskBase {
         void init() override;
         void tick(int16_t keycode) override;
         void refreshDisplay() override;
-        void refreshDisplay(bool goToBottom);  // wrapper
+        void refreshDisplay(scrollDirection direction);  // wrapper
         uint8_t getTaskID() override {return ID_CHATBOX;}
 
 };

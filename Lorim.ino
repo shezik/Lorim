@@ -29,6 +29,7 @@ uint8_t nodeShortMac[ADDR_LENGTH] = {0};
 void setup() {
 
     Serial.begin(115200);
+    u8g2.setBusClock(4000000);  // see U8g2 reference
     u8g2.begin();
     if (!LittleFS.begin(/*FORMAT_LITTLEFS_IF_FAILED*/)) {
         Serial.printf("Formatting LittleFS\n");

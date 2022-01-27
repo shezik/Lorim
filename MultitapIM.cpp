@@ -58,11 +58,11 @@ void MultitapIM::tick(int16_t keycode) {
 
     tickCount++;
 
-    if (tickCount == 10) {
+    if (tickCount == CURSOR_TICK_INTERVAL) {
         lastChar = str[lastPos];
         str[lastPos] = '_';
         showingCursor = true;
-    } else if (tickCount == 20) {
+    } else if (tickCount == CURSOR_TICK_INTERVAL * 2) {
         tickCount = 0;
         str[lastPos] = lastChar;
         showingCursor = false;
