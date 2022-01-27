@@ -2,10 +2,10 @@
 
 #include "Lorim_definitions.hpp"
 #include "Kbd_8x5_CH450.hpp"
-#include <U8g2lib.h>
 #include "Mailbox.hpp"
 #include "TaskBase.hpp"
 
+class SpicedU8g2;
 class TaskGEM;
 class TaskChatbox;
 

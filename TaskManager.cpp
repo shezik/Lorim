@@ -1,4 +1,5 @@
 #include "TaskManager.hpp"
+#include "SpicedU8g2.hpp"
 #include "TaskGEM.hpp"
 #include "TaskChatbox.hpp"
 

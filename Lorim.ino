@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <SPI.h>
-#include <U8g2lib.h>
+#include "SpicedU8g2.hpp"
 #include <cstring>
 #include "Layer1_LoRa.h"
 #include "LoRaLayer2.h"
@@ -11,7 +11,6 @@
 #include "Kbd_8x5_CH450.hpp"
 #include "TaskManager.hpp"
 #include "Mailbox.hpp"
-#include "SpicedU8g2.hpp"
 
 Layer1Class *Layer1;
 LL2Class *LL2;
