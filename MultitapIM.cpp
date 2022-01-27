@@ -1,5 +1,7 @@
 #include "MultitapIM.hpp"
 
+// THIS IS SO FUCKING DIFFICULT TO GIVE MAINTENANCE TO
+
 void MultitapIM::tick(int16_t keycode) {
 
     static auto processPending = [&](bool forceStop = false) {

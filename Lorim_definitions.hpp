@@ -10,7 +10,7 @@
 
 // TaskManager
 #define LONG_PRESS_DURATION 800/*ms*/
-// Task unique IDs
+// Task unique IDs (!! opt to enumeration instead?)
 #define ID_DEFAULT ID_TASKGEM
 #define ID_NONE    0
 #define ID_TASKGEM 1
