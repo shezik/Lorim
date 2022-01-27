@@ -11,7 +11,7 @@ class TaskChatbox;
 
 class TaskManager {
     private:
-        U8G2_DISPLAY_TYPE &u8g2;
+        SpicedU8g2 &u8g2;
         Kbd_8x5_CH450 &keyboard;
         Mailbox &mailbox;
         
@@ -25,7 +25,7 @@ class TaskManager {
         TaskBase *currentTask = nullptr;
 
     public:
-        TaskManager(U8G2_DISPLAY_TYPE &_u8g2, Kbd_8x5_CH450 &_keyboard, Mailbox &_mailbox);
+        TaskManager(SpicedU8g2 &_u8g2, Kbd_8x5_CH450 &_keyboard, Mailbox &_mailbox);
         ~TaskManager();
         void init();
         void tick();

@@ -5,11 +5,12 @@
 #include "Mailbox.hpp"
 #include "TaskManager.hpp"
 #include "MultitapIM.hpp"
+#include "SpicedU8g2.hpp"
 
 class TaskChatbox : public TaskBase {
     private:
         TaskManager &parentManager;
-        U8G2_DISPLAY_TYPE &u8g2;
+        SpicedU8g2 &u8g2;
         Mailbox &mailbox;
         FS &lilFS;
         File file;
@@ -32,11 +33,12 @@ class TaskChatbox : public TaskBase {
         uint16_t findPrevPage(File &file, uint16_t _startPos);
 
     public:
-        TaskChatbox(TaskManager &_parentManager, U8G2_DISPLAY_TYPE &_u8g2, Mailbox &_mailbox);
+        TaskChatbox(TaskManager &_parentManager, SpicedU8g2 &_u8g2, Mailbox &_mailbox);
         ~TaskChatbox() override;
         void init() override;
         void tick(int16_t keycode) override;
         void refreshDisplay() override;
+        void refreshDisplay(bool goToBottom);  // wrapper
         uint8_t getTaskID() override {return ID_CHATBOX;}
 
 };

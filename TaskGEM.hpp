@@ -13,7 +13,7 @@ class TaskGEM : public TaskBase {
                                           // so that static callback methods could locate it.
 
         TaskManager &parentManager;
-        U8G2_DISPLAY_TYPE &u8g2;
+        SpicedU8g2 &u8g2;
         Mailbox &mailbox;
 
         GEMProxy *menu;
@@ -32,7 +32,7 @@ class TaskGEM : public TaskBase {
         void setContrast();
 
     public:
-        TaskGEM(TaskManager &_parentManager, U8G2_DISPLAY_TYPE &_u8g2, Mailbox &_mailbox);
+        TaskGEM(TaskManager &_parentManager, SpicedU8g2 &_u8g2, Mailbox &_mailbox);
         ~TaskGEM() override;
         void init() override;
         void tick(int16_t keycode) override;
