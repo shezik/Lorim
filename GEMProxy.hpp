@@ -29,6 +29,7 @@ class GEMProxy : public GEM_u8g2 {
                 drawMenuPointer();
                 drawScrollbar();
                 static_cast<SpicedU8g2&>(_u8g2).drawElements(MsgCount, true);
+                _u8g2.setDrawColor(1);  // revert back
                 _u8g2.sendBuffer();
             #endif
         }

@@ -56,7 +56,7 @@ void SpicedU8g2::drawStatusBar(char* str) {
     } else {
         drawStr(2, 1, "Lorim " LORIM_VERSION);
     }
-    setDrawColor(1);  // revert back
+    setDrawColor(1);  // revert back, good practice?
 }
 
 void SpicedU8g2::drawMsgCount() {

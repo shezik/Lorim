@@ -18,6 +18,7 @@ class TaskChatbox : public TaskBase {
 
         void allocateMem();
         void freeMem();
+        void setDrawingStyle();
 
         // left and right border of printPage file position range
         uint16_t startPos = 0;

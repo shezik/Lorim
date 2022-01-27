@@ -21,11 +21,15 @@ void TaskChatbox::freeMem() {
     delete multitapIM; multitapIM = nullptr;
 }
 
-void TaskChatbox::init() {
-    mailbox.clearNewMsgCount();
+void TaskChatbox::setDrawingStyle() {
     u8g2.setFont(CHATBOX_FONT);
     u8g2.setFontMode(1);
     u8g2.setDrawColor(1);
+}
+
+void TaskChatbox::init() {
+    mailbox.clearNewMsgCount();
+    setDrawingStyle();
     u8g2.clear();
     refreshDisplay(true);
 }
@@ -57,6 +61,7 @@ void TaskChatbox::tick(int16_t keycode) {
                 u8g2.drawHLine(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE - 1, u8g2.getDisplayWidth());
                 u8g2.drawStr(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE, inputBuffer);
                 u8g2.drawElements(StatusBar);
+                setDrawingStyle();
                 u8g2.sendBuffer();
         }
         //Serial.printf("inputBuffer: %s\n", inputBuffer);
@@ -112,6 +117,7 @@ uint16_t TaskChatbox::printPage(File &file, uint16_t _startPos) {
         _endPos = printLine(file, _endPos, i * CHATBOX_VERTICAL_PACE, true);
     }
     u8g2.drawElements(StatusBar);
+    setDrawingStyle();
     u8g2.sendBuffer();
     return _endPos;
 }
