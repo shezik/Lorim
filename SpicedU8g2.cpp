@@ -1,6 +1,6 @@
 #include "SpicedU8g2.hpp"
 
-void SpicedU8g2::proxyInit(Mailbox* _mailbox, TaskManager* _taskman) {
+void SpicedU8g2::spiceInit(Mailbox* _mailbox, TaskManager* _taskman) {
     mailbox = _mailbox;
     taskman = _taskman;
 }

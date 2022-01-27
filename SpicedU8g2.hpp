@@ -12,7 +12,7 @@ enum DrawType {
 class SpicedU8g2 : public U8G2_DISPLAY_TYPE {
     public:
         using U8G2_DISPLAY_TYPE::U8G2_DISPLAY_TYPE;
-        void proxyInit(Mailbox* _mailbox, TaskManager* _taskman);
+        void spiceInit(Mailbox* _mailbox, TaskManager* _taskman);
         void tick();
         void drawElements(DrawType type, bool doUpdate = true);
         void drawElements(DrawType type, char* _str, bool doUpdate = true);

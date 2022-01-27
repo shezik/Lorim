@@ -38,7 +38,7 @@ void setup() {
     initLL2();
     mailbox.init(Layer1, LL2, nodeShortMac);
     taskManager.init();
-    u8g2.proxyInit(&mailbox, &taskManager);
+    u8g2.spiceInit(&mailbox, &taskManager);
 
 }
 
