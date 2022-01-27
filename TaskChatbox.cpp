@@ -1,6 +1,6 @@
 #include "TaskChatbox.hpp"
 
-TaskChatbox::TaskChatbox(TaskManager &_parentManager, U8G2_DISPLAY_TYPE &_u8g2, Mailbox &_mailbox)
+TaskChatbox::TaskChatbox(TaskManager &_parentManager, SpicedU8g2 &_u8g2, Mailbox &_mailbox)
     : parentManager(_parentManager)
     , u8g2(_u8g2)
     , mailbox(_mailbox)
@@ -27,10 +27,7 @@ void TaskChatbox::init() {
     u8g2.setFontMode(1);
     u8g2.setDrawColor(1);
     u8g2.clear();
-    file = lilFS.open(HISTORY_PATH, "r");
-    startPos = findPrevPage(file, file.size());
-    endPos = printPage(file, startPos);
-    file.close();
+    refreshDisplay(true);
 }
 
 void TaskChatbox::tick(int16_t keycode) {
@@ -41,6 +38,7 @@ void TaskChatbox::tick(int16_t keycode) {
                 multitapIM->unbind();
                 editMode = false;
                 inputBuffer[0] = '\0';
+                refreshDisplay(true);
                 break;
             case 14:
                 Serial.printf("Edit confirmed\n");
@@ -48,6 +46,7 @@ void TaskChatbox::tick(int16_t keycode) {
                 editMode = false;
                 mailbox.sendMessage(inputBuffer, mailbox.getNodeShortMac(), "Prototype");
                 inputBuffer[0] = '\0';
+                refreshDisplay(true);
                 break;
             default:
                 if (keycode != 0) Serial.printf("multitapIM->tick(%d)\n", keycode);
@@ -55,7 +54,9 @@ void TaskChatbox::tick(int16_t keycode) {
                 u8g2.setDrawColor(0);
                 u8g2.drawBox(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE, u8g2.getDisplayWidth(), CHATBOX_VERTICAL_PACE);
                 u8g2.setDrawColor(1);
+                u8g2.drawHLine(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE - 1, u8g2.getDisplayWidth());
                 u8g2.drawStr(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE, inputBuffer);
+                u8g2.drawElements(StatusBar);
                 u8g2.sendBuffer();
         }
         //Serial.printf("inputBuffer: %s\n", inputBuffer);
@@ -88,8 +89,14 @@ void TaskChatbox::tick(int16_t keycode) {
 }
 
 void TaskChatbox::refreshDisplay() {
+    refreshDisplay(false);
+}
+
+void TaskChatbox::refreshDisplay(bool goToBottom) {
     file = lilFS.open(HISTORY_PATH, "r");
-    printPage(file, startPos);
+    if (goToBottom)
+        startPos = findPrevPage(file, file.size());
+    endPos = printPage(file, startPos);
     file.close();
 }
 
@@ -104,6 +111,7 @@ uint16_t TaskChatbox::printPage(File &file, uint16_t _startPos) {
         */
         _endPos = printLine(file, _endPos, i * CHATBOX_VERTICAL_PACE, true);
     }
+    u8g2.drawElements(StatusBar);
     u8g2.sendBuffer();
     return _endPos;
 }
