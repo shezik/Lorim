@@ -27,89 +27,125 @@ void TaskChatbox::setDrawingStyle() {
     u8g2.setDrawColor(1);
 }
 
+void TaskChatbox::quitEditMode(bool sendMsg) {
+    multitapIM->unbind();
+    editMode = false;
+    if (sendMsg)
+        mailbox.sendMessage(inputBuffer, mailbox.getNodeShortMac(), "Prototype");
+    inputBuffer[0] = '\0';
+    drawDisplay(End, true, true);
+}
+
 void TaskChatbox::init() {
     mailbox.clearNewMsgCount();
     u8g2.clear();
     setDrawingStyle();
-    refreshDisplay(End);
+    drawDisplay(End, true, true);
 }
 
 void TaskChatbox::tick(int16_t keycode) {
-    if (mailbox.getNewMsgCount()) {
+    bool shouldUpdate = false;
+    static bool browsingHistory = false;
+    static uint16_t prevMsgCount = 0;
+    uint16_t msgCount = mailbox.getNewMsgCount();
+
+    if (!browsingHistory && pageEndPointer < fileSizeBuf) {
+        browsingHistory = true;
+        prevMsgCount = 0;
+    } else if (browsingHistory) {
+        browsingHistory = false;
+        if (prevMsgCount)
+            shouldUpdate = true;
+    }
+
+    if (browsingHistory) {
+        if (prevMsgCount != msgCount) {
+            prevMsgCount = msgCount;
+            shouldUpdate = true;  // not scroll and draw message count
+        }
+    } else if (msgCount) {
         mailbox.clearNewMsgCount();
-        refreshDisplay(End);
+        shouldUpdate = true;  // go to bottom and not draw message count
     }
 
     if (editMode) {
         switch (keycode) {
-            case 13:
-                Serial.printf("Edit cancelled\n");
-                multitapIM->unbind();
-                editMode = false;
-                inputBuffer[0] = '\0';
-                refreshDisplay(End);
-                break;
             case 14:
+                Serial.printf("Edit cancelled\n");
+                quitEditMode(false);
+                break;
+            case 13:
                 Serial.printf("Edit confirmed\n");
-                multitapIM->unbind();
-                editMode = false;
-                mailbox.sendMessage(inputBuffer, mailbox.getNodeShortMac(), "Prototype");
-                inputBuffer[0] = '\0';
-                refreshDisplay(End);
+                quitEditMode(true);
                 break;
             default:
-                if (keycode != 0) Serial.printf("multitapIM->tick(%d)\n", keycode);
+                if (keycode) Serial.printf("multitapIM->tick(%d) executed\n", keycode);  // debug
                 multitapIM->tick(keycode);
 
-                u8g2.setDrawColor(0);
-                u8g2.drawBox(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE, u8g2.getDisplayWidth(), CHATBOX_VERTICAL_PACE);
-                
-                u8g2.setDrawColor(1);
-                u8g2.drawHLine(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE - 1, u8g2.getDisplayWidth());
-                u8g2.drawStr(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE, inputBuffer);
-
-                u8g2.drawElements(StatusBar);
-                setDrawingStyle();
-                
-                bool shouldUpdate = false;
                 for (uint8_t i = 0; i < MAX_INPUT_LENGTH + 1; i++) {  // last byte is definitely '\0' though... doesn't matter.
                     if (oldInputBuffer[i] != inputBuffer[i]) {
                         oldInputBuffer[i] = inputBuffer[i];
+                        Serial.printf("TaskChatbox: inputBuffer difference found!\n");  // debug
                         shouldUpdate = true;
                     }
                 }
 
-                if (shouldUpdate)
+                if (shouldUpdate) {
+                    //Serial.printf("inputBuffer: %s\n", inputBuffer);
+                    drawDisplay(End, true, false);  // don't send buffer yet
+                    u8g2.setDrawColor(0);
+                    u8g2.drawBox(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE, u8g2.getDisplayWidth(), CHATBOX_VERTICAL_PACE);
+                    u8g2.setDrawColor(1);
+                    u8g2.drawHLine(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE - 1, u8g2.getDisplayWidth());
+                    u8g2.drawStr(0, u8g2.getDisplayHeight() - 1 - CHATBOX_VERTICAL_PACE, inputBuffer);
                     u8g2.sendBuffer();
+                }
         }
-        //Serial.printf("inputBuffer: %s\n", inputBuffer);
     } else {
         switch (keycode) {
-            case 1:
-                refreshDisplay(PrevLine);
-                break;
             case 2:
-                refreshDisplay(NextLine);
+                drawDisplay(PrevLine, true, true);
+                break;
+            case 8:
+                drawDisplay(NextLine, true, true);
+                break;
+            case 6:
+                drawDisplay(PrevPage, true, true);
+                break;
+            case 4:
+                drawDisplay(NextPage, true, true);
                 break;
             case 3:
                 (lilFS.open(HISTORY_PATH, "w+")).close();  // clear history data
+                drawDisplay(Beginning, true, true);
                 break;
-            case 4:
-                Serial.printf("Entering edit mode\nmultitapIM->bind() returned %d\n", multitapIM->bind(inputBuffer, MAX_INPUT_LENGTH + 1));
+            case 5:
+                Serial.printf("Entering edit mode: multitapIM->bind() returned %d\n", multitapIM->bind(inputBuffer, MAX_INPUT_LENGTH + 1));  // debug
                 editMode = true;
+                //drawDisplay(End, true, true);
                 break;
-            case 8:
+            case 1:
                 parentManager.switchTo(ID_TASKGEM, true);
                 break;
+            default:
+                if (shouldUpdate) {
+                    if (browsingHistory) {
+                        drawDisplay(None, true, true, All);  // show new message count
+                    } else {
+                        drawDisplay(End, true, true);
+                    }
+                }
         }
     }
 }
 
+#pragma region
+
 void TaskChatbox::refreshDisplay() {
-    refreshDisplay(None);
+    drawDisplay(None, true, true);
 }
 
-void TaskChatbox::refreshDisplay(scrollDirection direction) {
+void TaskChatbox::drawDisplay(scrollDirection direction, bool doDrawElements, bool doSendBuffer, DrawType type) {
     file = lilFS.open(HISTORY_PATH, "r");
     switch (direction) {
         case None:
@@ -133,17 +169,27 @@ void TaskChatbox::refreshDisplay(scrollDirection direction) {
             break;
     }
     u8g2.clearBuffer();
-    printPage(file, filePointer);
-    u8g2.drawElements(StatusBar);
-    setDrawingStyle();  // after calling drawElements()
-    u8g2.sendBuffer();
+    pageEndPointer = printPage(file, filePointer, true);
+
+    if (direction == End) {
+        fileSizeBuf = pageEndPointer;
+    } else {
+        fileSizeBuf = printPage(file, findPrevPage(file, file.size()), false);
+    }
+
+    if (doDrawElements) {
+        u8g2.drawElements(type);
+        setDrawingStyle();  // after calling drawElements()
+    }
+    if (doSendBuffer)
+        u8g2.sendBuffer();
     file.close();
 }
 
-uint16_t TaskChatbox::printPage(File &file, uint16_t _startPos) {
+uint16_t TaskChatbox::printPage(File &file, uint16_t _startPos, bool doPrint) {
     uint16_t _endPos = _startPos;
     for (uint8_t i = 0; i < LINES_PER_PAGE; i++) {
-        _endPos = printLine(file, _endPos, i * CHATBOX_VERTICAL_PACE, true);
+        _endPos = printLine(file, _endPos, i * CHATBOX_VERTICAL_PACE, doPrint);
     }
     return _endPos;
 }
@@ -235,3 +281,5 @@ uint16_t TaskChatbox::findNextPage(File &file, uint16_t _startPos) {
     }
     return _endPos;
 }
+
+#pragma endregion

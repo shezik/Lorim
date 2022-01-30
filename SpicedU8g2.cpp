@@ -12,7 +12,6 @@ void SpicedU8g2::drawElements(DrawType type, bool doUpdate) {
 void SpicedU8g2::drawElements(DrawType type, char* _str, bool doUpdate) {
     Serial.printf("SpicedU8g2: drawElements() called!\n");  // debug
 
-    tickCount = 0;
     if (doUpdate) fetchData();
     switch (type) {
         case StatusBar:
@@ -29,11 +28,7 @@ void SpicedU8g2::drawElements(DrawType type, char* _str, bool doUpdate) {
 }
 
 void SpicedU8g2::tick() {
-    if (tickCount > 49) {  // update every 50 ticks
-        fetchData();
-        tickCount = 0;
-    } else tickCount++;
-
+    fetchData();
     if (newMsgCount != prevMsgCount) {
         Serial.printf("SpicedU8g2: newMsgCount updated to %d, previously %d\n", newMsgCount, prevMsgCount);  // debug
         prevMsgCount = newMsgCount;

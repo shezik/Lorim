@@ -14,10 +14,10 @@ class MultitapIM {
                                 // 2. (lowercase)\n(long-press);
                                 // 3. (uppercase)\r(long-press);
                                 // 4. long-presses can be removed too.
-        ".,?!():\"\n1",  "abc\nABC\r2", "def\nDEF\r3",
-        "ghi\nGHI\r4",   "jkl\nJKL\r5", "mno\nMNO\r6",
-        "pqrs\nPQRS\r7", "tuv\nTUV\r8", "wxyz\nWXYZ\r9",
-        "\x01\n*",       " \n0",        "\x02\n#"
+        "def\nDEF\r3",   "abc\nABC\r2", ".,?!():\"\n1",
+        "mno\nMNO\r6",   "jkl\nJKL\r5", "ghi\nGHI\r4",
+        "wxyz\nWXYZ\r9", "tuv\nTUV\r8", "pqrs\nPQRS\r7",
+        "\x02\n#"        " \n0",        "\x01\n*",
     };
     uint8_t inputMode = 0;  // 0 - abc
                             // 1 - Abc

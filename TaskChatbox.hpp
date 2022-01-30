@@ -23,15 +23,20 @@ class TaskChatbox : public TaskBase {
         void allocateMem();
         void freeMem();
         void setDrawingStyle();
+        void drawDisplay(scrollDirection direction, bool doDrawElements, bool doSendBuffer, DrawType type = StatusBar);
+        void quitEditMode(bool sendMsg);
 
         // left and right border of printPage file position range
         uint16_t filePointer = 0;
+        // the following two variables only get updated on calling drawDisplay()
+        uint16_t pageEndPointer = 0;
+        size_t fileSizeBuf = 0;
 
         char inputBuffer[MAX_INPUT_LENGTH + 1] = {'\0'};
         char oldInputBuffer[MAX_INPUT_LENGTH + 1] = {'\0'};
         bool editMode = false;
 
-        uint16_t printPage(File &file, uint16_t _startPos);
+        uint16_t printPage(File &file, uint16_t _startPos, bool doPrint);
         uint16_t printLine(File &file, uint16_t _startPos, uint8_t y, bool doPrint);
         uint16_t findPrevLine(File &file, uint16_t _startPos);
         uint16_t findNextLine(File &file, uint16_t _startPos);
@@ -44,7 +49,6 @@ class TaskChatbox : public TaskBase {
         void init() override;
         void tick(int16_t keycode) override;
         void refreshDisplay() override;
-        void refreshDisplay(scrollDirection direction);  // wrapper
         uint8_t getTaskID() override {return ID_CHATBOX;}
 
 };

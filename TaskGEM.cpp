@@ -81,22 +81,22 @@ void TaskGEM::tick(int16_t keycode) {
         //    Serial.printf("Registered keycode: %d\n", keycode);
         //}
         switch (keycode) {
-            case 1:
+            case 2:
                 menu->registerKeyPress(GEM_KEY_UP);
                 break;
-            case 2:
+            case 8:
                 menu->registerKeyPress(GEM_KEY_DOWN);
                 break;
-            case 3:
+            case 6:
                 menu->registerKeyPress(GEM_KEY_LEFT);
                 break;
             case 4:
                 menu->registerKeyPress(GEM_KEY_RIGHT);
                 break;
-            case 7:
+            case 5:
                 menu->registerKeyPress(GEM_KEY_OK);
                 break;
-            case 8:
+            case 1:
                 menu->registerKeyPress(GEM_KEY_CANCEL);
                 break;
             default:

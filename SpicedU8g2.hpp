@@ -21,7 +21,6 @@ class SpicedU8g2 : public U8G2_DISPLAY_TYPE {
         Mailbox* mailbox = nullptr;  // to get message count
         TaskManager* taskman = nullptr;  // to tell task to refresh screen
 
-        uint8_t tickCount = 50;
         uint16_t newMsgCount = 0;
         uint16_t prevMsgCount = newMsgCount;
 

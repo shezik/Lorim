@@ -25,7 +25,7 @@
 // MultitapIM
 #define MAX_INPUT_LENGTH 128  // size stored as uint8_t
 #define SELECTION_TIMEOUT 2000/*ms*/
-#define CURSOR_TICK_INTERVAL 200/*ticks*/
+#define CURSOR_TICK_INTERVAL 20000/*ticks*/
 
 // esp32
 #define CH450_INT 34
