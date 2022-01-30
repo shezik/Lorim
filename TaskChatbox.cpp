@@ -19,6 +19,7 @@ void TaskChatbox::allocateMem() {
 
 void TaskChatbox::freeMem() {
     delete multitapIM; multitapIM = nullptr;
+    u8g2.setSpiceEnabled(true);
 }
 
 void TaskChatbox::setDrawingStyle() {
@@ -37,6 +38,7 @@ void TaskChatbox::quitEditMode(bool sendMsg) {
 }
 
 void TaskChatbox::init() {
+    u8g2.setSpiceEnabled(false);  // we will handle updates by ourselves
     mailbox.clearNewMsgCount();
     u8g2.clear();
     setDrawingStyle();
@@ -49,10 +51,10 @@ void TaskChatbox::tick(int16_t keycode) {
     static uint16_t prevMsgCount = 0;
     uint16_t msgCount = mailbox.getNewMsgCount();
 
-    if (!browsingHistory && pageEndPointer < fileSizeBuf) {
+    if (!browsingHistory && (pageEndPointer < fileSizeBuf)) {
         browsingHistory = true;
         prevMsgCount = 0;
-    } else if (browsingHistory) {
+    } else if (browsingHistory && (pageEndPointer >= fileSizeBuf)) {
         browsingHistory = false;
         if (prevMsgCount)
             shouldUpdate = true;
@@ -104,16 +106,16 @@ void TaskChatbox::tick(int16_t keycode) {
     } else {
         switch (keycode) {
             case 2:
-                drawDisplay(PrevLine, true, true);
+                drawDisplay(PrevLine, true, true, browsingHistory);
                 break;
             case 8:
-                drawDisplay(NextLine, true, true);
+                drawDisplay(NextLine, true, true, browsingHistory);
                 break;
             case 6:
-                drawDisplay(PrevPage, true, true);
+                drawDisplay(PrevPage, true, true, browsingHistory);
                 break;
             case 4:
-                drawDisplay(NextPage, true, true);
+                drawDisplay(NextPage, true, true, browsingHistory);
                 break;
             case 3:
                 (lilFS.open(HISTORY_PATH, "w+")).close();  // clear history data
@@ -122,18 +124,22 @@ void TaskChatbox::tick(int16_t keycode) {
             case 5:
                 Serial.printf("Entering edit mode: multitapIM->bind() returned %d\n", multitapIM->bind(inputBuffer, MAX_INPUT_LENGTH + 1));  // debug
                 editMode = true;
-                //drawDisplay(End, true, true);
+                drawDisplay(End, true, false);
                 break;
             case 1:
                 parentManager.switchTo(ID_TASKGEM, true);
                 break;
             default:
+                //Serial.printf("TaskChatbox: shouldUpdate = %d, browsingHistory = %d\n", shouldUpdate, browsingHistory);  // debug
                 if (shouldUpdate) {
+                    /*
                     if (browsingHistory) {
-                        drawDisplay(None, true, true, All);  // show new message count
+                        drawDisplay(None, true, true, true);  // show new message count
                     } else {
                         drawDisplay(End, true, true);
                     }
+                    */
+                    drawDisplay(browsingHistory? None: End, true, true, browsingHistory);
                 }
         }
     }
@@ -145,7 +151,7 @@ void TaskChatbox::refreshDisplay() {
     drawDisplay(None, true, true);
 }
 
-void TaskChatbox::drawDisplay(scrollDirection direction, bool doDrawElements, bool doSendBuffer, DrawType type) {
+void TaskChatbox::drawDisplay(scrollDirection direction, bool doDrawElements, bool doSendBuffer, bool showMsgCount) {
     file = lilFS.open(HISTORY_PATH, "r");
     switch (direction) {
         case None:
@@ -161,6 +167,7 @@ void TaskChatbox::drawDisplay(scrollDirection direction, bool doDrawElements, bo
             break;
         case NextPage:
             filePointer = findNextPage(file, filePointer);
+            break;
         case Beginning:
             filePointer = 0;
             break;
@@ -178,12 +185,14 @@ void TaskChatbox::drawDisplay(scrollDirection direction, bool doDrawElements, bo
     }
 
     if (doDrawElements) {
-        u8g2.drawElements(type);
+        u8g2.drawElements(showMsgCount? All: StatusBar);
         setDrawingStyle();  // after calling drawElements()
     }
     if (doSendBuffer)
         u8g2.sendBuffer();
     file.close();
+
+    Serial.printf("TaskChatbox: direction: %d, fileSizeBuf = %d, pageEndPointer = %d\n", direction, fileSizeBuf, pageEndPointer);  // debug
 }
 
 uint16_t TaskChatbox::printPage(File &file, uint16_t _startPos, bool doPrint) {

@@ -16,11 +16,13 @@ class SpicedU8g2 : public U8G2_DISPLAY_TYPE {
         void tick();
         void drawElements(DrawType type, bool doUpdate = true);
         void drawElements(DrawType type, char* _str, bool doUpdate = true);
+        void setSpiceEnabled(bool enabled);
 
     private:
         Mailbox* mailbox = nullptr;  // to get message count
         TaskManager* taskman = nullptr;  // to tell task to refresh screen
 
+        bool enabled = true;
         uint16_t newMsgCount = 0;
         uint16_t prevMsgCount = newMsgCount;
 

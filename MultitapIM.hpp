@@ -17,7 +17,7 @@ class MultitapIM {
         "def\nDEF\r3",   "abc\nABC\r2", ".,?!():\"\n1",
         "mno\nMNO\r6",   "jkl\nJKL\r5", "ghi\nGHI\r4",
         "wxyz\nWXYZ\r9", "tuv\nTUV\r8", "pqrs\nPQRS\r7",
-        "\x02\n#"        " \n0",        "\x01\n*",
+        "\x02\n#",       " \n0",        "\x01\n*"
     };
     uint8_t inputMode = 0;  // 0 - abc
                             // 1 - Abc

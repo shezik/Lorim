@@ -27,12 +27,17 @@ void SpicedU8g2::drawElements(DrawType type, char* _str, bool doUpdate) {
     }
 }
 
+void SpicedU8g2::setSpiceEnabled(bool enabled) {
+    this->enabled = enabled;
+}
+
 void SpicedU8g2::tick() {
     fetchData();
     if (newMsgCount != prevMsgCount) {
         Serial.printf("SpicedU8g2: newMsgCount updated to %d, previously %d\n", newMsgCount, prevMsgCount);  // debug
         prevMsgCount = newMsgCount;
-        taskman->refreshDisplay();  // let task itself trigger drawElements()
+        if (enabled)
+            taskman->refreshDisplay();  // let task itself trigger drawElements()
     }
 }
 

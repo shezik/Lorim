@@ -23,7 +23,7 @@ class TaskChatbox : public TaskBase {
         void allocateMem();
         void freeMem();
         void setDrawingStyle();
-        void drawDisplay(scrollDirection direction, bool doDrawElements, bool doSendBuffer, DrawType type = StatusBar);
+        void drawDisplay(scrollDirection direction, bool doDrawElements, bool doSendBuffer, bool showMsgCount = false);
         void quitEditMode(bool sendMsg);
 
         // left and right border of printPage file position range
