@@ -1,13 +1,23 @@
 # Lorim Pinouts
 
-## *THIS IS A PLACEHOLDER FILE AND IS SUBJECT TO CHANGE AT ANY TIME*
+![DOIT ESP32 DevKit V1 Pinout](./Assets/devLayout.png "DOIT ESP32 DevKit V1 Pinout")
 
-![DOIT ESP32 DevKit V1 Pinout](./devLayout.png "DOIT ESP32 DevKit V1 Pinout")
+-----
+
+### Configure MCU pin functions [here](../Lorim_definitions.hpp#L30).
+<!-- Should point to line that says '// esp32' -->
 
 -----
 
 ## Keyboard scanner CH450 (I<sup>2</sup>C)
-*Will this work as an IO expander?*<br>
+*Will this work as an IO expander?* **No.**<br>
+
+<details>
+<summary>Keyboard is wired to CH450 in this way.</summary>
+
+![Keyboard connection](./Assets/IMG_6160.JPG)
+</details>
+
 - D21 - SDA
 - D22 - SCL
 - D34 - Interrupt
@@ -26,6 +36,9 @@
 -----
 
 ## LoRa Module SX1278 (HSPI)
+- [SX1276/77/78/79 Datasheet by Semtech (English)](./Assets/DS_SX1276-7-8-9_W_APP_V7.pdf)
+- [SX1278ZTR4-GC Module Datasheet by Silicontra (Simplified Chinese)](./Assets/SX1278ZTR4-lora.pdf)
+
 | Arduino | Description  | Module |
 |---------|--------------|--------|
 | D12     | MISO         | MISO   |
@@ -37,8 +50,29 @@
 
 -----
 
-##  Reserved pins
-Nothing.
+## Reserved pins
+Reserved section. ;)
+
+-----
+
+## Keycodes
+- facing display
+
+|    |    |    |    |
+|----|----|----|----|
+| 13 |  3 |  2 |  1 |
+| 14 |  6 |  5 |  4 |
+| 15 |  9 |  8 |  7 |
+| 16 | 12 | 11 | 10 |
+
+- facing keyboard
+
+|    |    |    |    |
+|----|----|----|----|
+|  1 |  2 |  3 | 13 |
+|  4 |  5 |  6 | 14 |
+|  7 |  8 |  9 | 15 |
+| 10 | 11 | 12 | 16 |
 
 -----
 

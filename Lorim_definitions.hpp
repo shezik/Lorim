@@ -42,7 +42,7 @@
 #define LORA_CS 15   // HSPI_CS0
 #define LORA_RST 36
 #define LORA_DIO 39
-#define LORA_FREQ 470E6
+#define LORA_FREQ 470E6  // depends on your antenna setup
 
 // Mailbox
 #define ARDUINO_LORA
@@ -52,3 +52,8 @@
 // SpicedU8g2
 #define STATUSBAR_FONT u8g2_font_micro_tr
 #define STATUSBAR_FONTHEIGHT 5
+
+
+// If you change this file, be sure to change the hyperlink to here in Pinouts.md to match line '// esp32'.
+// If you change this file, be sure to change the hyperlink to here in Pinouts.md to match line '// esp32'.
+// If you change this file, be sure to change the hyperlink to here in Pinouts.md to match line '// esp32'.
