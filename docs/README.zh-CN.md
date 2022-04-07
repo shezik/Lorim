@@ -17,9 +17,15 @@ Lorim 是基于 LoRa 技术，由 ESP32 驱动的开源掌上短消息设备。
 ![Photo 4](./Assets/IMG_6162.JPG)
 </details>
 
-- [功能和 Demo]()
+- [功能和 Demo](./Demo.zh-CN.md)
 
-- [开发者：连线和引脚定义](./Pinouts.md)
+<details>
+<summary>开发者</summary>
+
+- [连线和引脚定义](./Pinouts.md)
+
+- [代码文档](./CodeDocs.zh-CN.md)
+</details>
 
 ## 进度
 可以说是基本完成了。还缺少私信、自定义并保存用户名等功能。

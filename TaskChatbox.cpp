@@ -19,7 +19,7 @@ void TaskChatbox::allocateMem() {
 
 void TaskChatbox::freeMem() {
     delete multitapIM; multitapIM = nullptr;
-    u8g2.setSpiceEnabled(true);
+    u8g2.enableAutoRefresh(true);
 }
 
 void TaskChatbox::setDrawingStyle() {
@@ -38,7 +38,7 @@ void TaskChatbox::quitEditMode(bool sendMsg) {
 }
 
 void TaskChatbox::init() {
-    u8g2.setSpiceEnabled(false);  // we will handle updates by ourselves
+    u8g2.enableAutoRefresh(false);  // we will handle updates by ourselves
     mailbox.clearNewMsgCount();
     u8g2.clear();
     setDrawingStyle();

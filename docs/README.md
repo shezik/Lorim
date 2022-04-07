@@ -17,9 +17,15 @@ Lorim is an open-source handheld messaging device based on LoRa technology, powe
 ![Photo 4](./Assets/IMG_6162.JPG)
 </details>
 
-- [Features & Demonstration]()
+- [Features & Demonstration](./Demo.md)
 
-- [For developers: Wiring and pinouts](./Pinouts.md)
+<details>
+<summary>For developers</summary>
+
+- [Wiring and pinouts](./Pinouts.md)
+
+- [Code documentation](./CodeDocs.md)
+</details>
 
 ## Progress
 I'm going to call it done. Lacks the ability to PM, customize and save username, etc.

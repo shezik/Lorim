@@ -27,7 +27,7 @@ void SpicedU8g2::drawElements(DrawType type, char* _str, bool doUpdate) {
     }
 }
 
-void SpicedU8g2::setSpiceEnabled(bool enabled) {
+void SpicedU8g2::enableAutoRefresh(bool enabled) {
     this->enabled = enabled;
 }
 
