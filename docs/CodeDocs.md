@@ -29,10 +29,20 @@ Finally, save and close this file. Now you can try building and flashing this pr
 
 -----
 
-Now that your codebase is building fine, let's put the hardware part together.
+Now that your codebase is building fine, let's put the device together.
 
 ## Step 2: Hardware Connections
 
-Lorim utilizes a keyboard scanner and segmented LED display driver CH340 to read keyboard inputs. The chip communicates with ESP32 through I<sup>2</sup>C protocol. Please refer to [Pinouts.md](./Pinouts.md#keyboard-scanner-ch450-i2c) for all the wirings.
+Lorim utilizes a keyboard scanner and segmented LED display driver CH340 to read keyboard inputs. The chip communicates with ESP32 through non-standard I<sup>2</sup>C protocol, so [a custom driver](../Kbd_8x5_CH450.hpp) had to be implemented. Please refer to [Pinouts.md](./Pinouts.md#keyboard-scanner-ch450-i2c) for all the wirings.
 
-For the LoRa part, my two devices are using SX1278 modules, though many other models are also supported, see [sudomesh/LoRaLayer2](https://github.com/sudomesh/LoRaLayer2#description-of-library-files). Undoubtedly, you guessed it, please refer to manufacturer datasheet and [Pinouts.md](./Pinouts.md#lora-module-sx1278-hspi) for power supply, wirings and stuff.
+For the LoRa part, my two devices are using SX1278 modules via SPI, though many other models are also supported, see [sudomesh/LoRaLayer2](https://github.com/sudomesh/LoRaLayer2#description-of-library-files). Undoubtedly, you guessed it, please refer to manufacturer datasheet and [Pinouts.md](./Pinouts.md#lora-module-sx1278-hspi) for power supply, wirings and stuff.
+
+The display is merely a common U8g2-compatible 12864 dot matrix LCD via SPI.
+
+-----
+
+Here comes the real code documentation part.
+
+## Module dependency tree
+
+Well, I ought to draw something here but nah, maybe later.
