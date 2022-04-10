@@ -1,3 +1,12 @@
+/*
+    TaskGEM.cpp
+    Copyright (C) 2022  shezik
+
+    This program is licensed under GNU General Public License version 3, and
+    is part of project Lorim.
+    Please refer to Lorim.ino and LICENSE for details.
+*/
+
 #include "TaskGEM.hpp"
 
 TaskGEM *TaskGEM::callbackContext = nullptr;  // init static variable and allocate memory otherwise you get linker errors

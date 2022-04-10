@@ -1,3 +1,12 @@
+/*
+    Lorim_definitions.hpp
+    Copyright (C) 2022  shezik
+
+    This program is licensed under GNU General Public License version 3, and
+    is part of project Lorim.
+    Please refer to Lorim.ino and LICENSE for details.
+*/
+
 #pragma once
 
 #define LORIM_VERSION "v0.1"
